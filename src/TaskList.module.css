@@ -1,0 +1,179 @@
+html,
+body {
+  height: 100%;
+  overflow: hidden;
+  margin: 0;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(
+    165deg,
+    #a38fff,
+    #a38fff,
+    #a38fff,
+    #a38fff,
+    #a38fff,
+    #999dff,
+    #8faaff,
+    #87b7ff,
+    #82c2ff,
+    #80cdff,
+    #82d7ff,
+    #88e0ff
+  );
+  font-family: "Roboto", sans-serif;
+  font-size: 1rem;
+  color: white;
+  font-optical-sizing: auto;
+}
+
+.select {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-color: transparent;
+  border-radius: 1rem;
+  height: 1.5rem;
+  justify-content: end;
+  width: 5rem;
+  color: white;
+  font-weight: bold;
+  margin-right: 0.5rem;
+}
+
+.select option {
+  color: black;
+}
+
+.taskList {
+  flex-grow: 1;
+  padding-left: 0.25rem;
+  overflow: hidden;
+  margin: 0.5rem;
+}
+
+.title {
+  font-size: medium;
+}
+
+.titleHeader {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+}
+
+.addTaskButtonContainer {
+  padding-left: 0.25rem;
+  display: flex;
+  justify-content: center;
+}
+
+.addTaskButton {
+  border: transparent;
+  border-radius: 50%;
+  height: 4rem;
+  width: 4rem;
+  color: white;
+  font-size: 2rem;
+  font-weight: normal;
+  background-color: #b63cf2;
+  bottom: 1rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  position: fixed;
+}
+
+.dateRibbon {
+  background: linear-gradient(
+    to bottom,
+    rgba(189, 155, 246, 1),
+    rgba(224, 195, 253, 0.5)
+  );
+  border-bottom-left-radius: 10%;
+  border-bottom-right-radius: 10%;
+  padding: 1.5rem 0.25rem;
+}
+
+.hideDateRibbon {
+  height: 0rem;
+  padding: 0.75rem;
+}
+
+.showDateRibbon {
+  height: 11rem;
+}
+
+.dateRibbonLabel {
+  font-size: large;
+  font-weight: bold;
+  color: white;
+}
+
+.dateRibbonGrabberBar {
+  border-radius: 2px;
+  height: 5px;
+  cursor: pointer;
+  background-color: #e3dbf9;
+  width: 4rem;
+  margin-bottom: 0.5rem;
+}
+
+.grabberParent {
+  display: flex;
+  justify-content: center;
+  align-items: end;
+}
+
+.months {
+  padding-top: 1rem;
+  display: flex;
+  flex-direction: row;
+  overflow-x: auto;
+}
+
+.months::-webkit-scrollbar {
+  display: none;
+}
+
+.month {
+  cursor: pointer;
+  padding: 0.5rem 1.5rem;
+  user-select: none;
+}
+
+.selectedMonth {
+  background-color: #b63cf2;
+  padding: 0.5rem 1.5rem;
+  border-radius: 1rem;
+}
+
+.days {
+  display: flex;
+  gap: 1.5rem;
+  padding-top: 0.75rem;
+  padding-bottom: 1.25rem;
+  overflow-x: auto;
+}
+
+.days::-webkit-scrollbar {
+  display: none;
+}
+
+.day {
+  background-color: white;
+  color: #b63cf2;
+  flex-direction: column;
+  flex-shrink: 0;
+  font-weight: bold;
+  display: inline-flex;
+  height: 5rem;
+  width: 3.5rem;
+  border-radius: 1rem;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.selectedDay {
+  background-color: #b63cf2;
+  color: white;
+}

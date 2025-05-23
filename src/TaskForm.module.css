@@ -1,0 +1,76 @@
+.taskForm {
+  padding: 2rem;
+  border-radius: 8px;
+  gap: 0.25rem;
+  display: inline-grid;
+}
+
+.buttons {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.inputWrapper {
+  display: flex;
+}
+
+textarea {
+  height: 4rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+  font-family: "Roboto", sans-serif;
+  width: 100%;
+  padding: 0.5rem;
+}
+
+input[type="text"] {
+  width: 100%;
+  height: 2rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  padding: 0.5rem;
+  font-size: 1rem;
+}
+
+input[type="date"] {
+  width: 100%;
+  height: 1rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  padding: 0.5rem;
+}
+
+button {
+  background-color: #b63cf2;
+  border: transparent;
+  color: white;
+  height: 3rem;
+  width: 5rem;
+  border-radius: 10%;
+}
+
+.title {
+  font-size: small;
+}
+
+select {
+  width: 100%;
+  height: 2rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  padding-left: 0.2rem;
+  font-size: 1rem;
+}
+
+.dateHeader {
+  display: grid;
+  grid-template-columns: auto auto;
+  gap: 1rem;
+}
+
+.dates {
+  display: flex;
+  gap: 1rem;
+}
