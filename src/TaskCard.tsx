@@ -7,8 +7,6 @@ import { CSS } from "@dnd-kit/utilities";
 
 type TaskCardProps = {
   id: number;
-  isDueToday?: boolean;
-  isOverdue?: boolean;
   task?: Task;
   onDeleteTask?: (task: Task) => void;
   onClick?: (task: Task) => void;
@@ -17,8 +15,6 @@ type TaskCardProps = {
 
 export function TaskCard({
   id,
-  isDueToday,
-  isOverdue,
   task,
   onDeleteTask,
   onClick,
@@ -58,15 +54,8 @@ export function TaskCard({
   return (
     task && (
       <li key={task.id}>
-        {(isDueToday || isOverdue) && (
-          <div className={styles.dueLabel}>
-            {isDueToday ? "Due" : "Overdue"}
-          </div>
-        )}
         <div
-          className={classNames(styles.taskCard, {
-            [styles.due]: isDueToday || isOverdue,
-          })}
+          className={styles.taskCard}
           onClick={handleTaskClick(task)}
           ref={setNodeRef}
           {...attributes}
@@ -98,7 +87,7 @@ export function TaskCard({
               <span className={styles.tooltip}>Delete Task</span>
             </div>
             <div className={styles.checkbox}>
-              <input type="checkbox" checked={isChecked} onChange={(e) => {}} />
+              <input type="checkbox" checked={isChecked} onChange={() => {}} />
               <label onClick={handleLabelClick} htmlFor="checkbox"></label>
             </div>
             <div className={styles.dragHandle} {...attributes} {...listeners}>

@@ -52,14 +52,12 @@ body {
   margin: 0.5rem;
 }
 
-.title {
-  font-size: medium;
-}
-
 .titleHeader {
-  display: grid;
-  grid-template-columns: 1fr auto;
+  display: flex;
+  justify-content: flex-end;
   align-items: center;
+  padding-top: 0.75rem;
+  padding-bottom: 0;
 }
 
 .addTaskButtonContainer {

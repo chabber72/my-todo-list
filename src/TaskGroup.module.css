@@ -1,0 +1,11 @@
+.taskList {
+  padding-left: 0.25rem;
+  overflow: hidden;
+  margin: 0.5rem;
+}
+
+.title {
+  font-size: medium;
+  padding-left: 0.25rem;
+  padding-bottom: 0.25rem;
+}

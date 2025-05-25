@@ -1,22 +1,18 @@
 import { useEffect, useRef, useState } from "react";
 import { TaskForm } from "./TaskForm";
-import { TaskCard } from "./TaskCard";
 import { categories, Task } from "./task";
-import styles from "./TaskList.module.css";
+
 import {
-  DndContext,
   DragEndEvent,
   PointerSensor,
   TouchSensor,
   useSensor,
 } from "@dnd-kit/core";
-import {
-  arrayMove,
-  SortableContext,
-  verticalListSortingStrategy,
-} from "@dnd-kit/sortable";
-import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
+import { arrayMove } from "@dnd-kit/sortable";
 import classNames from "classnames";
+import { TaskGroup } from "./TaskGroup";
+import styles from "./TaskList.module.css";
+import { createRectAdjustmentFn } from "@dnd-kit/core/dist/utilities/rect/rectAdjustment";
 
 const today = new Date();
 const currentMonth = today.toLocaleString("default", {
@@ -167,15 +163,13 @@ export function TaskList() {
     setShowDatePanel((prev) => !prev);
   };
 
-  const handleMonthClick =
-    (value: Month) => (event: React.MouseEvent<HTMLDivElement>) => {
-      setSelectedMonth(value);
-    };
+  const handleMonthClick = (value: Month) => () => {
+    setSelectedMonth(value);
+  };
 
-  const handleDayClick =
-    (value: number) => (event: React.MouseEvent<HTMLDivElement>) => {
-      setSelectedDay(value);
-    };
+  const handleDayClick = (value: number) => () => {
+    setSelectedDay(value);
+  };
 
   const getDayName = (indexMonth: number, indexDay: number) => {
     const day = new Date(today.getFullYear(), indexMonth, indexDay);
@@ -190,8 +184,10 @@ export function TaskList() {
           months.indexOf(selectedMonth),
           selectedDay,
           0,
-        ).getDate()
+        )
       : null;
+
+  const selectedDateIndex = selectedDate && selectedDate.getDate();
 
   const handleSelectedFilterClick = (
     event: React.ChangeEvent<HTMLSelectElement>,
@@ -200,35 +196,65 @@ export function TaskList() {
   };
 
   const filterOnDueDate = (dueDate?: Date) => {
-    return selectedDate && dueDate !== undefined
-      ? getDayNumber(dueDate) >= selectedDate
+    return selectedDateIndex && dueDate !== undefined
+      ? getDayNumber(dueDate) >= selectedDateIndex
       : true;
   };
 
   const filterOnStartDate = (startDate?: Date) => {
-    return selectedDate && startDate !== undefined
-      ? getDayNumber(startDate) <= selectedDate
+    return selectedDateIndex && startDate !== undefined
+      ? getDayNumber(startDate) <= selectedDateIndex
       : true;
-  };
-
-  const isDueToday = (dueDate?: Date) => {
-    return selectedDate && dueDate !== undefined
-      ? getDayNumber(dueDate) === selectedDate
-      : false;
-  };
-
-  const isOverDue = (dueDate?: Date) => {
-    return selectedDate && dueDate !== undefined
-      ? getDayNumber(dueDate) < selectedDate
-      : false;
   };
 
   const filteredData = data.filter(
     (t) =>
       (t.category === selectedFilter || selectedFilter === "All") &&
+      t.status !== "done" &&
       ((t.dueDate === undefined && t.startDate === undefined) ||
         filterOnDueDate(t.dueDate) ||
         filterOnStartDate(t.startDate)),
+  );
+
+  const overdueTasks = filteredData.filter((t) =>
+    selectedDateIndex && t.dueDate !== undefined
+      ? getDayNumber(t.dueDate) < selectedDateIndex
+      : false,
+  );
+
+  const dueTasks = filteredData.filter((t) =>
+    selectedDateIndex && t.dueDate !== undefined
+      ? getDayNumber(t.dueDate) === selectedDateIndex
+      : false,
+  );
+  createRectAdjustmentFnff;
+  const getNextMonday = (date: Date) => {
+    const mondayDate = new Date(date);
+    const dateFrom = mondayDate.setDate(
+      mondayDate.getDate() + (((7 - mondayDate.getDay()) % 7) + 1),
+    );
+    return new Date(dateFrom);
+  };
+
+  const getNextSunday = (date: Date) => {
+    const nextMonday = getNextMonday(date);
+    return new Date(
+      nextMonday.setDate(nextMonday.getDate() + (nextMonday.getDay() + 5)),
+    );
+  };
+
+  const dueNextWeekTasks = filteredData.filter((t) =>
+    t.dueDate !== undefined && selectedDate
+      ? new Date(t.dueDate) >= getNextMonday(selectedDate) &&
+        new Date(t.dueDate) <= getNextSunday(selectedDate)
+      : false,
+  );
+
+  const currentTasks = filteredData.filter(
+    (t) =>
+      !dueTasks.includes(t) &&
+      !overdueTasks.includes(t) &&
+      !dueNextWeekTasks.includes(t),
   );
 
   return showForm ? (
@@ -270,7 +296,7 @@ export function TaskList() {
             <div className={styles.days}>
               {Array.from(
                 { length: daysInMonth(selectedMonth) },
-                (x, i) => i,
+                (_x, i) => i,
               ).map((i) => {
                 const index = i + 1;
                 return (
@@ -305,7 +331,6 @@ export function TaskList() {
       </div>
       <div className={styles.taskList}>
         <div className={styles.titleHeader}>
-          <h2 className={styles.title}>Tasks</h2>
           <select
             className={styles.select}
             value={selectedFilter}
@@ -319,33 +344,46 @@ export function TaskList() {
             ))}
           </select>
         </div>
-        <ul>
-          <DndContext
-            onDragEnd={handleDragEnd}
-            sensors={[mouseSensor, touchSensor]}
-            modifiers={[restrictToVerticalAxis]}
-          >
-            <SortableContext
-              items={data}
-              strategy={verticalListSortingStrategy}
-            >
-              {filteredData.map((task) => (
-                <TaskCard
-                  id={task.id}
-                  key={task.id}
-                  task={task}
-                  isDueToday={
-                    isDueToday(task.dueDate) && task.status !== "done"
-                  }
-                  isOverdue={isOverDue(task.dueDate) && task.status !== "done"}
-                  onDeleteTask={handleDeleteTask}
-                  onClick={handleTaskClick}
-                  onUpdateTask={handleTaskUpdate}
-                />
-              ))}
-            </SortableContext>
-          </DndContext>
-        </ul>
+        <TaskGroup
+          filteredData={overdueTasks}
+          groupDescription="Overdue"
+          mouseSensor={mouseSensor}
+          touchSensor={touchSensor}
+          handleDeleteTask={handleDeleteTask}
+          handleDragEnd={handleDragEnd}
+          handleTaskClick={handleTaskClick}
+          handleTaskUpdate={handleTaskUpdate}
+        />
+        <TaskGroup
+          filteredData={dueTasks}
+          groupDescription="Due Today"
+          mouseSensor={mouseSensor}
+          touchSensor={touchSensor}
+          handleDeleteTask={handleDeleteTask}
+          handleDragEnd={handleDragEnd}
+          handleTaskClick={handleTaskClick}
+          handleTaskUpdate={handleTaskUpdate}
+        />
+        <TaskGroup
+          filteredData={dueNextWeekTasks}
+          groupDescription="Due Next Week"
+          mouseSensor={mouseSensor}
+          touchSensor={touchSensor}
+          handleDeleteTask={handleDeleteTask}
+          handleDragEnd={handleDragEnd}
+          handleTaskClick={handleTaskClick}
+          handleTaskUpdate={handleTaskUpdate}
+        />
+        <TaskGroup
+          filteredData={currentTasks}
+          groupDescription="Current"
+          mouseSensor={mouseSensor}
+          touchSensor={touchSensor}
+          handleDeleteTask={handleDeleteTask}
+          handleDragEnd={handleDragEnd}
+          handleTaskClick={handleTaskClick}
+          handleTaskUpdate={handleTaskUpdate}
+        />
       </div>
       <div className={styles.addTaskButtonContainer}>
         <button className={styles.addTaskButton} onClick={handleAddTaskClick}>
