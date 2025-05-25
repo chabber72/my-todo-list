@@ -12,7 +12,6 @@ import { arrayMove } from "@dnd-kit/sortable";
 import classNames from "classnames";
 import { TaskGroup } from "./TaskGroup";
 import styles from "./TaskList.module.css";
-import { createRectAdjustmentFn } from "@dnd-kit/core/dist/utilities/rect/rectAdjustment";
 
 const today = new Date();
 const currentMonth = today.toLocaleString("default", {
@@ -227,7 +226,7 @@ export function TaskList() {
       ? getDayNumber(t.dueDate) === selectedDateIndex
       : false,
   );
-  createRectAdjustmentFnff;
+
   const getNextMonday = (date: Date) => {
     const mondayDate = new Date(date);
     const dateFrom = mondayDate.setDate(
