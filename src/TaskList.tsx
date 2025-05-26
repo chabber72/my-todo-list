@@ -12,7 +12,14 @@ import { arrayMove } from "@dnd-kit/sortable";
 import classNames from "classnames";
 import { TaskGroup } from "./TaskGroup";
 import styles from "./TaskList.module.css";
-import { getFullDate, getNextMonday, getNextSunday, getUTCDate } from "./dates";
+import {
+  getFullDate,
+  getNextMonday,
+  getNextSunday,
+  getThisMonday,
+  getThisSunday,
+  getUTCDate,
+} from "./dates";
 
 const today = new Date();
 const currentMonth = today.toLocaleString("default", {
@@ -241,7 +248,23 @@ export function TaskList() {
       : false,
   );
 
-  const dueNextWeekTasks = filteredData.filter((t) =>
+  const dueThisWeekTasks = data.filter((t) =>
+    selectedDateIndex &&
+    t.dueDate !== undefined &&
+    selectedDate &&
+    t.startDate !== undefined
+      ? getUTCDate(t.dueDate) >= getThisMonday(selectedDate) &&
+        getUTCDate(t.dueDate) <= getThisSunday(selectedDate) &&
+        getUTCDate(t.startDate) >
+          getFullDate(
+            today.getFullYear(),
+            months.indexOf(selectedMonth),
+            selectedDateIndex,
+          )
+      : false,
+  );
+
+  const dueNextWeekTasks = data.filter((t) =>
     t.dueDate !== undefined && selectedDate
       ? getUTCDate(t.dueDate) >= getNextMonday(selectedDate) &&
         getUTCDate(t.dueDate) <= getNextSunday(selectedDate)
@@ -363,6 +386,16 @@ export function TaskList() {
           handleTaskUpdate={handleTaskUpdate}
         />
         <TaskGroup
+          filteredData={dueThisWeekTasks}
+          groupDescription="Due This Week"
+          mouseSensor={mouseSensor}
+          touchSensor={touchSensor}
+          handleDeleteTask={handleDeleteTask}
+          handleDragEnd={handleDragEnd}
+          handleTaskClick={handleTaskClick}
+          handleTaskUpdate={handleTaskUpdate}
+        />
+        <TaskGroup
           filteredData={dueNextWeekTasks}
           groupDescription="Due Next Week"
           mouseSensor={mouseSensor}
@@ -374,7 +407,7 @@ export function TaskList() {
         />
         <TaskGroup
           filteredData={currentTasks}
-          groupDescription="Current"
+          groupDescription="Active"
           mouseSensor={mouseSensor}
           touchSensor={touchSensor}
           handleDeleteTask={handleDeleteTask}

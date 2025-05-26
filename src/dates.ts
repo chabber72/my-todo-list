@@ -6,6 +6,16 @@ export const getNextMonday = (date: Date) => {
   return new Date(dateFrom);
 };
 
+export const getThisMonday = (date: Date) => {
+  const newDate = new Date(getNextMonday(date));
+  return new Date(newDate.setDate(newDate.getDate() - 7));
+};
+
+export const getThisSunday = (date: Date) => {
+  const newDate = new Date(getNextSunday(date));
+  return new Date(newDate.setDate(newDate.getDate() - 7));
+};
+
 export const getNextSunday = (date: Date) => {
   const nextMonday = getNextMonday(date);
   return new Date(
