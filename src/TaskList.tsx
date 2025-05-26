@@ -12,6 +12,7 @@ import { arrayMove } from "@dnd-kit/sortable";
 import classNames from "classnames";
 import { TaskGroup } from "./TaskGroup";
 import styles from "./TaskList.module.css";
+import { getFullDate, getNextMonday, getNextSunday, getUTCDate } from "./dates";
 
 const today = new Date();
 const currentMonth = today.toLocaleString("default", {
@@ -36,13 +37,6 @@ type Month = (typeof months)[number];
 const daysInMonth = (month: Month) => {
   const index = months.indexOf(month) + 1;
   return new Date(today.getFullYear(), index, 0).getDate();
-};
-const getDayNumber = (date: Date) => {
-  return new Date(
-    new Date(date).toLocaleString("en-US", {
-      timeZone: "UTC",
-    }),
-  ).getDate();
 };
 
 const isVisibleInViewport = (element: HTMLElement) => {
@@ -196,13 +190,23 @@ export function TaskList() {
 
   const filterOnDueDate = (dueDate?: Date) => {
     return selectedDateIndex && dueDate !== undefined
-      ? getDayNumber(dueDate) >= selectedDateIndex
+      ? getUTCDate(dueDate) <=
+          getFullDate(
+            today.getFullYear(),
+            months.indexOf(selectedMonth),
+            selectedDateIndex,
+          )
       : true;
   };
 
   const filterOnStartDate = (startDate?: Date) => {
     return selectedDateIndex && startDate !== undefined
-      ? getDayNumber(startDate) <= selectedDateIndex
+      ? getUTCDate(startDate) <=
+          getFullDate(
+            today.getFullYear(),
+            months.indexOf(selectedMonth),
+            selectedDateIndex,
+          )
       : true;
   };
 
@@ -217,35 +221,30 @@ export function TaskList() {
 
   const overdueTasks = filteredData.filter((t) =>
     selectedDateIndex && t.dueDate !== undefined
-      ? getDayNumber(t.dueDate) < selectedDateIndex
+      ? getUTCDate(t.dueDate) <
+        getFullDate(
+          today.getFullYear(),
+          months.indexOf(selectedMonth),
+          selectedDateIndex,
+        )
       : false,
   );
 
   const dueTasks = filteredData.filter((t) =>
     selectedDateIndex && t.dueDate !== undefined
-      ? getDayNumber(t.dueDate) === selectedDateIndex
+      ? getUTCDate(t.dueDate).getTime() ===
+        getFullDate(
+          today.getFullYear(),
+          months.indexOf(selectedMonth),
+          selectedDateIndex,
+        ).getTime()
       : false,
   );
 
-  const getNextMonday = (date: Date) => {
-    const mondayDate = new Date(date);
-    const dateFrom = mondayDate.setDate(
-      mondayDate.getDate() + (((7 - mondayDate.getDay()) % 7) + 1),
-    );
-    return new Date(dateFrom);
-  };
-
-  const getNextSunday = (date: Date) => {
-    const nextMonday = getNextMonday(date);
-    return new Date(
-      nextMonday.setDate(nextMonday.getDate() + (nextMonday.getDay() + 5)),
-    );
-  };
-
   const dueNextWeekTasks = filteredData.filter((t) =>
     t.dueDate !== undefined && selectedDate
-      ? new Date(t.dueDate) >= getNextMonday(selectedDate) &&
-        new Date(t.dueDate) <= getNextSunday(selectedDate)
+      ? getUTCDate(t.dueDate) >= getNextMonday(selectedDate) &&
+        getUTCDate(t.dueDate) <= getNextSunday(selectedDate)
       : false,
   );
 
