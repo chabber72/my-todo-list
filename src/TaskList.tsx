@@ -20,6 +20,7 @@ import {
   getThisSunday,
   getUTCDate,
 } from "./dates";
+import useLongPress from "./hooks/useLongPress";
 
 const today = new Date();
 const currentMonth = today.toLocaleString("default", {
@@ -62,6 +63,7 @@ export function TaskList() {
   const [showDatePanel, setShowDatePanel] = useState(true);
   const [selectedMonth, setSelectedMonth] = useState<Month>(currentMonth);
   const [selectedDay, setSelectedDay] = useState<number>(today.getDate());
+  const [isRecording, setIsRecording] = useState(false);
   const [currentTask, setCurrentTask] = useState<Task | undefined>();
   const [selectedFilter, setSelectedFilter] = useState<string>("All");
   const storedArrayString = localStorage.getItem("myData");
@@ -70,6 +72,15 @@ export function TaskList() {
   );
   const refDay = useRef<Map<number, HTMLDivElement>>(new Map());
   const refMonth = useRef<Map<string, HTMLDivElement>>(new Map());
+
+  const backspaceLongPress = useLongPress<HTMLButtonElement>({
+    onLongPress() {
+      setIsRecording(true);
+    },
+    onClick() {
+      isRecording ? setIsRecording((prev) => !prev) : handleAddTaskClick();
+    },
+  });
 
   useEffect(() => {
     localStorage.setItem("myData", JSON.stringify(data));
@@ -418,8 +429,34 @@ export function TaskList() {
         />
       </div>
       <div className={styles.addTaskButtonContainer}>
-        <button className={styles.addTaskButton} onClick={handleAddTaskClick}>
-          +
+        <button
+          {...backspaceLongPress}
+          className={classNames(styles.addTaskButton, {
+            [styles.recording]: isRecording,
+          })}
+        >
+          {isRecording ? (
+            <svg
+              height="1rem"
+              width="1rem"
+              version="1.1"
+              id="Capa_1"
+              xmlns="http://www.w3.org/2000/svg"
+              xmlnsXlink="http://www.w3.org/1999/xlink"
+              viewBox="0 0 10.334 10.334"
+              xmlSpace="preserve"
+            >
+              <g>
+                <path
+                  style={{ fill: "#FFFFFF" }}
+                  d="M10.333,9.816c0,0.285-0.231,0.518-0.517,0.518H0.517C0.233,10.334,0,10.102,0,9.816V0.517
+		C0,0.232,0.231,0,0.517,0h9.299c0.285,0,0.517,0.231,0.517,0.517V9.816z"
+                />
+              </g>
+            </svg>
+          ) : (
+            "+"
+          )}
         </button>
       </div>
     </>
