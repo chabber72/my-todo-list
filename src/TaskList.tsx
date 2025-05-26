@@ -249,6 +249,7 @@ export function TaskList() {
   );
 
   const dueThisWeekTasks = data.filter((t) =>
+    (t.category === selectedFilter || selectedFilter === "All") &&
     selectedDateIndex &&
     t.dueDate !== undefined &&
     selectedDate &&
