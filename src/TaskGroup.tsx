@@ -23,7 +23,6 @@ type TaskGroupProps = {
     };
   }>;
   handleDragEnd?: (event: DragEndEvent) => void;
-  handleDeleteTask?: (task: Task) => void;
   handleTaskClick?: (task: Task) => void;
   handleTaskUpdate?: (task: Task) => void;
 };
@@ -31,7 +30,6 @@ type TaskGroupProps = {
 export function TaskGroup({
   filteredData,
   groupDescription,
-  handleDeleteTask,
   handleDragEnd,
   handleTaskClick,
   handleTaskUpdate,
@@ -41,7 +39,9 @@ export function TaskGroup({
   return (
     filteredData.length > 0 && (
       <div className={styles.taskList}>
-        <div className={styles.title}>{groupDescription}</div>
+        {groupDescription && (
+          <div className={styles.title}>{groupDescription}</div>
+        )}
         <ul>
           <DndContext
             onDragEnd={handleDragEnd}
@@ -57,7 +57,6 @@ export function TaskGroup({
                   id={task.id}
                   key={task.id}
                   task={task}
-                  onDeleteTask={handleDeleteTask}
                   onClick={handleTaskClick}
                   onUpdateTask={handleTaskUpdate}
                 />

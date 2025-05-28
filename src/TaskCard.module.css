@@ -1,6 +1,6 @@
 .taskCard {
   display: grid;
-  grid-template-columns: 60% auto;
+  grid-template-columns: 72% auto;
   cursor: pointer;
   border: 1px solid #ccc;
   border-radius: 12px;
@@ -161,4 +161,25 @@ ul {
   gap: 1.5rem;
   align-items: center;
   justify-content: flex-end;
+}
+
+.navigation {
+  display: grid;
+  grid-auto-flow: column;
+  grid-column: span 2;
+  grid-column-gap: 0.25rem;
+  padding-top: 1rem;
+  height: 1rem;
+  width: 100%;
+}
+
+.navigationLink {
+  background-color: #b63cf2;
+  border-radius: 1rem;
+  color: white;
+  padding: 0rem 0.5rem;
+  font-size: smaller;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }

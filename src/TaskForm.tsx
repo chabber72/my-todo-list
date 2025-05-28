@@ -6,6 +6,7 @@ import React from "react";
 type TaskFormProps = {
   task?: Task;
   onTaskAdd?: (task: Task) => void;
+  onTaskDelete?: (task: Task) => void;
   onTaskUpdate?: (task: Task) => void;
   onCancel?: () => void;
 };
@@ -13,6 +14,7 @@ type TaskFormProps = {
 export function TaskForm({
   onCancel,
   onTaskAdd,
+  onTaskDelete,
   onTaskUpdate,
   task,
 }: TaskFormProps) {
@@ -65,6 +67,12 @@ export function TaskForm({
       onCancel();
     }
   }
+
+  const handleDeleteClick = () => {
+    if (task && onTaskDelete) {
+      onTaskDelete(task);
+    }
+  };
 
   const handleUpdate = () => {
     if (currentTask && onTaskUpdate) {
@@ -119,7 +127,7 @@ export function TaskForm({
           cols={30}
         />
       </div>
-      <h2 className={styles.title}>Details:</h2>
+      <h2 className={styles.title}>Category:</h2>
 
       <select onChange={handleCategoryChange} value={currentTask?.category}>
         <option value="">Select a category</option>
@@ -172,10 +180,13 @@ export function TaskForm({
         />
       </div>
       <div className={styles.buttons}>
-        <button onClick={handleOnCancel}>Cancel</button>
+        <button onClick={handleOnCancel}>Cancel</button>      
         <button onClick={task ? handleUpdate : handleAdd}>
           {task ? "Update" : "Add"}
         </button>
+        {task && (
+          <button onClick={handleDeleteClick}>Delete</button>
+        )}
       </div>
     </div>
   );

@@ -8,21 +8,16 @@ import { CSS } from "@dnd-kit/utilities";
 type TaskCardProps = {
   id: number;
   task?: Task;
-  onDeleteTask?: (task: Task) => void;
   onClick?: (task: Task) => void;
   onUpdateTask?: (task: Task) => void;
 };
 
-export function TaskCard({
-  id,
-  task,
-  onDeleteTask,
-  onClick,
-  onUpdateTask,
-}: TaskCardProps) {
+export function TaskCard({ id, task, onClick, onUpdateTask }: TaskCardProps) {
   const [isChecked, setIsChecked] = React.useState(task?.status === "done");
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id });
+
+  const parents: string[] = ["Downsize Apartment"];
 
   const handleLabelClick = (e: React.MouseEvent<HTMLLabelElement>) => {
     e.stopPropagation();
@@ -35,13 +30,6 @@ export function TaskCard({
 
       onUpdateTask(updatedTask);
       setIsChecked(isSelected);
-    }
-  };
-
-  const handleDeleteClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    e.stopPropagation();
-    if (task && onDeleteTask) {
-      onDeleteTask(task);
     }
   };
 
@@ -81,9 +69,6 @@ export function TaskCard({
           </div>
           <div className={styles.buttons}>
             <div className={styles.tooltipContainer}>
-              <div className={styles.deleteButton} onClick={handleDeleteClick}>
-                X
-              </div>
               <span className={styles.tooltip}>Delete Task</span>
             </div>
             <div className={styles.checkbox}>
@@ -94,6 +79,15 @@ export function TaskCard({
               <span className={styles.dragIcon}>::</span>
             </div>
           </div>
+          {task.parentId !== undefined && (
+            <div className={styles.navigation}>
+              {parents.map((p) => (
+                <div className={styles.navigationLink} key={p}>
+                  {p}
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </li>
     )

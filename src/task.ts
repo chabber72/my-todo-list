@@ -3,6 +3,7 @@ type TaskCategory = (typeof categories)[number];
 
 export interface Task {
   id: number;
+  parentId?: number;
   sortedId: number;
   title: string;
   category?: TaskCategory;

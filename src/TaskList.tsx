@@ -21,7 +21,7 @@ import {
   getUTCDate,
 } from "./dates";
 import useLongPress from "./hooks/useLongPress";
-
+ 
 const today = new Date();
 const currentMonth = today.toLocaleString("default", {
   month: "long",
@@ -137,11 +137,6 @@ export function TaskList() {
   const handleAddTaskClick = () => {
     setCurrentTask(undefined);
     setShowForm(true);
-  };
-
-  const handleDeleteTask = (task: Task) => {
-    setCurrentTask(undefined);
-    setData((prev) => prev.filter((t) => t !== task));
   };
 
   const handleTaskClick = (task: Task) => {
@@ -290,12 +285,19 @@ export function TaskList() {
       !dueNextWeekTasks.includes(t),
   );
 
+  const handleDeleteTask = (task: Task) => {
+    setCurrentTask(undefined);
+    setData((prev) => prev.filter((t) => t !== task));
+    setShowForm(false);
+  };
+
   return showForm ? (
     <TaskForm
       onTaskAdd={handleOnTaskAdd}
       task={currentTask}
       onCancel={handleOnCancel}
       onTaskUpdate={handleTaskUpdate}
+      onTaskDelete={handleDeleteTask}
     />
   ) : (
     <>
@@ -382,7 +384,6 @@ export function TaskList() {
           groupDescription="Overdue"
           mouseSensor={mouseSensor}
           touchSensor={touchSensor}
-          handleDeleteTask={handleDeleteTask}
           handleDragEnd={handleDragEnd}
           handleTaskClick={handleTaskClick}
           handleTaskUpdate={handleTaskUpdate}
@@ -392,7 +393,6 @@ export function TaskList() {
           groupDescription="Due Today"
           mouseSensor={mouseSensor}
           touchSensor={touchSensor}
-          handleDeleteTask={handleDeleteTask}
           handleDragEnd={handleDragEnd}
           handleTaskClick={handleTaskClick}
           handleTaskUpdate={handleTaskUpdate}
@@ -402,7 +402,6 @@ export function TaskList() {
           groupDescription="Due This Week"
           mouseSensor={mouseSensor}
           touchSensor={touchSensor}
-          handleDeleteTask={handleDeleteTask}
           handleDragEnd={handleDragEnd}
           handleTaskClick={handleTaskClick}
           handleTaskUpdate={handleTaskUpdate}
@@ -412,7 +411,6 @@ export function TaskList() {
           groupDescription="Due Next Week"
           mouseSensor={mouseSensor}
           touchSensor={touchSensor}
-          handleDeleteTask={handleDeleteTask}
           handleDragEnd={handleDragEnd}
           handleTaskClick={handleTaskClick}
           handleTaskUpdate={handleTaskUpdate}
@@ -422,7 +420,6 @@ export function TaskList() {
           groupDescription="Active"
           mouseSensor={mouseSensor}
           touchSensor={touchSensor}
-          handleDeleteTask={handleDeleteTask}
           handleDragEnd={handleDragEnd}
           handleTaskClick={handleTaskClick}
           handleTaskUpdate={handleTaskUpdate}
