@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 import styles from "./TaskForm.module.css";
-import { categories, Task } from "./task";
+import { categories, Task } from "../task";
 import React from "react";
 
 type TaskFormProps = {
@@ -180,13 +180,11 @@ export function TaskForm({
         />
       </div>
       <div className={styles.buttons}>
-        <button onClick={handleOnCancel}>Cancel</button>      
+        <button onClick={handleOnCancel}>Cancel</button>
         <button onClick={task ? handleUpdate : handleAdd}>
           {task ? "Update" : "Add"}
         </button>
-        {task && (
-          <button onClick={handleDeleteClick}>Delete</button>
-        )}
+        {task && <button onClick={handleDeleteClick}>Delete</button>}
       </div>
     </div>
   );

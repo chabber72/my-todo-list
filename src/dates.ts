@@ -23,14 +23,6 @@ export const getNextSunday = (date: Date) => {
   );
 };
 
-export const getDayNumber = (date: Date) => {
-  return new Date(
-    new Date(date).toLocaleString("en-US", {
-      timeZone: "UTC",
-    }),
-  ).getDate();
-};
-
 export const getFullDate = (year: number, month: number, day: number) => {
   return new Date(year, month, day, 0);
 };

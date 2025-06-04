@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { TaskForm } from "./TaskForm";
-import { categories, Task } from "./task";
+import { categories, Task } from "../task";
 
 import {
   DragEndEvent,
@@ -19,10 +19,10 @@ import {
   getThisMonday,
   getThisSunday,
   getUTCDate,
-} from "./dates";
-import useLongPress from "./hooks/useLongPress";
-import { Icon } from "./components/icon";
- 
+} from "../dates";
+import useLongPress from "../hooks/useLongPress";
+import { Icon } from "./icon";
+
 const today = new Date();
 const currentMonth = today.toLocaleString("default", {
   month: "long",
@@ -433,11 +433,7 @@ export function TaskList() {
             [styles.recording]: isRecording,
           })}
         >
-          {isRecording ? (            
-            <Icon name="square" />
-          ) : (
-            "+"
-          )}
+          {isRecording ? <Icon name="square" /> : "+"}
         </button>
       </div>
     </>
