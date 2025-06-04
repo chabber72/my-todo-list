@@ -51,3 +51,5 @@ export const Months = [
 ] as const;
 
 export type Month = (typeof Months)[number];
+
+export const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
