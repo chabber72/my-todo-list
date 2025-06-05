@@ -94,6 +94,7 @@ export function DatePanel({
                   refDay.current.set(index, el);
                 }
               }}
+              role="gridcell"
             >
               {index}
               <div>{getDayName(Months.indexOf(selectedMonth), index)}</div>
