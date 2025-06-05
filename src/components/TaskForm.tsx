@@ -11,6 +11,17 @@ type TaskFormProps = {
   onCancel?: () => void;
 };
 
+const EMPTY_TASK: Task = {
+  id: -1,
+  sortedId: 1,
+  title: "",
+  description: "",
+  category: undefined,
+  createdAt: new Date(),
+  dueDate: undefined,
+  startDate: undefined,
+};
+
 export function TaskForm({
   onCancel,
   onTaskAdd,
@@ -18,7 +29,10 @@ export function TaskForm({
   onTaskUpdate,
   task,
 }: TaskFormProps) {
-  const [currentTask, setCurrentTask] = useState<Task | undefined>(task);
+  const [currentTask, setCurrentTask] = useState<Task>({
+    ...EMPTY_TASK,
+    ...task,
+  });
   const ref = useRef<HTMLInputElement>(null);
 
   React.useEffect(() => {
@@ -62,7 +76,7 @@ export function TaskForm({
   }
 
   function handleOnCancel(): void {
-    setCurrentTask(undefined);
+    setCurrentTask(EMPTY_TASK);
     if (onCancel) {
       onCancel();
     }
@@ -111,25 +125,33 @@ export function TaskForm({
       <div className={styles.inputWrapper}>
         {ref && (
           <input
-            value={currentTask?.title}
+            value={currentTask.title}
             onChange={handleTitleChange}
             ref={ref}
             type="text"
+            role="textbox"
+            aria-label="title"
           />
         )}
       </div>
       <h2 className={styles.title}>Description:</h2>
       <div className={styles.inputWrapper}>
         <textarea
-          value={currentTask?.description}
+          value={currentTask.description}
           onChange={handleDescriptionChange}
           rows={10}
           cols={30}
+          role="textbox"
+          aria-label="description"
         />
       </div>
       <h2 className={styles.title}>Category:</h2>
 
-      <select onChange={handleCategoryChange} value={currentTask?.category}>
+      <select
+        role="combobox"
+        onChange={handleCategoryChange}
+        value={currentTask?.category}
+      >
         <option value="">Select a category</option>
         {categories.map((category) => (
           <option key={category} value={category}>

@@ -2,7 +2,6 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import checker from "vite-plugin-checker";
 import path from "path";
-
 export default defineConfig({
   plugins: [
     react(),
@@ -15,7 +14,7 @@ export default defineConfig({
     emptyOutDir: true,
     sourcemap: true,
     lib: {
-      entry: path.resolve(__dirname, "src/index.ts"),
+      entry: path.resolve(__dirname, "src/main.tsx"),
       formats: ["es"],
     },
     rollupOptions: {

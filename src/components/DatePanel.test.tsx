@@ -10,8 +10,8 @@ describe("DatePanel", () => {
     refDay: { current: new Map() },
     selectedMonth: "June" as Month,
     selectedDay: 5,
-    onMonthClick: jest.fn().mockReturnValue(jest.fn()),
-    onDayClick: jest.fn().mockReturnValue(jest.fn()),
+    onMonthClick: jest.fn(() => () => {}),
+    onDayClick: jest.fn(() => () => {}),
   };
 
   beforeEach(() => {
