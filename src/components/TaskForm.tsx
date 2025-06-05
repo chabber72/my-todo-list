@@ -42,31 +42,19 @@ export function TaskForm({
   }, [ref]);
 
   const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setCurrentTask((prev) =>
-      prev
-        ? { ...prev, title: event.target.value }
-        : ({
-            id: -1,
-            sortedId: 1,
-            title: event.target.value,
-            createdAt: new Date(),
-          } as Task),
-    );
+    setCurrentTask((prev) => ({
+      ...(prev || EMPTY_TASK),
+      title: event.target.value,
+    }));
   };
 
   const handleDescriptionChange = (
     event: React.ChangeEvent<HTMLTextAreaElement>,
   ) => {
-    setCurrentTask((prev) =>
-      prev
-        ? { ...prev, description: event.target.value }
-        : ({
-            id: -1,
-            sortedId: 1,
-            description: event.target.value,
-            createdAt: new Date(),
-          } as Task),
-    );
+    setCurrentTask((prev) => ({
+      ...(prev || EMPTY_TASK),
+      description: event.target.value as Task["category"],
+    }));
   };
 
   function handleAdd(): void {
@@ -97,18 +85,10 @@ export function TaskForm({
   const handleCategoryChange = (
     event: React.ChangeEvent<HTMLSelectElement>,
   ) => {
-    const newTask = {
-      id: -1,
-      sortedId: 1,
-      title: "",
-      createdAt: new Date(),
+    setCurrentTask((prev) => ({
+      ...(prev || EMPTY_TASK),
       category: event.target.value as Task["category"],
-    } as Task;
-    setCurrentTask((prev) =>
-      prev
-        ? { ...prev, category: event.target.value as Task["category"] }
-        : newTask,
-    );
+    }));
   };
 
   const dueDate = currentTask?.dueDate
@@ -169,17 +149,10 @@ export function TaskForm({
           value={startDate?.toISOString().split("T")[0]}
           onChange={(e) => {
             const date = new Date(e.target.value);
-            setCurrentTask((prev) =>
-              prev
-                ? { ...prev, startDate: date }
-                : ({
-                    id: -1,
-                    sortedId: 1,
-                    startDate: date,
-                    createdAt: new Date(),
-                    title: "",
-                  } as Task),
-            );
+            setCurrentTask((prev) => ({
+              ...(prev || EMPTY_TASK),
+              startDate: date,
+            }));
           }}
         />
         <input
@@ -187,17 +160,10 @@ export function TaskForm({
           value={dueDate?.toISOString().split("T")[0]}
           onChange={(e) => {
             const date = new Date(e.target.value);
-            setCurrentTask((prev) =>
-              prev
-                ? { ...prev, dueDate: date }
-                : ({
-                    id: -1,
-                    sortedId: 1,
-                    dueDate: date,
-                    createdAt: new Date(),
-                    title: "",
-                  } as Task),
-            );
+            setCurrentTask((prev) => ({
+              ...(prev || EMPTY_TASK),
+              dueDate: date,
+            }));
           }}
         />
       </div>
