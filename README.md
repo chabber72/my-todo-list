@@ -60,18 +60,23 @@ npm run build
 my-todo-list/
 ├── src/
 │   ├── components/
-│   │   ├── AddTaskButton.tsx
-│   │   ├── DateRibbon.tsx
+│   │   ├── DatePanel.tsx
 │   │   ├── TaskCard.tsx
 │   │   ├── TaskForm.tsx
 │   │   ├── TaskGroup.tsx
 │   │   └── TaskList.tsx
-│   ├── __tests__/
+│   ├── hooks/
+│   │   ├── useLongPress.ts
+│   ├── tests/
+│   │   ├── DatePanel.test.tsx
 │   │   ├── TaskCard.test.tsx
 │   │   ├── TaskForm.test.tsx
 │   │   ├── TaskGroup.test.tsx
 │   │   └── TaskList.test.tsx
 │   ├── App.tsx
+│   ├── dates.ts
+│   ├── task.ts
+│   ├── main.tsx
 ├── package.json
 ├── tsconfig.json
 ```
