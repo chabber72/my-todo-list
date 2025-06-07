@@ -60,18 +60,20 @@ npm run build
 my-todo-list/
 ├── src/
 │   ├── components/
-│   │   ├── TaskList.tsx
+│   │   ├── AddTaskButton.tsx
+│   │   ├── DateRibbon.tsx
+│   │   ├── TaskCard.tsx
+│   │   ├── TaskForm.tsx
 │   │   ├── TaskGroup.tsx
-│   │   └── ...
-│   ├── stores/
-│   │   └── taskStore.ts
-│   ├── tests/
-│   │   ├── TaskList.test.tsx
-│   │   └── TaskGroup.test.tsx
-│   └── App.tsx
-├── public/
+│   │   └── TaskList.tsx
+│   ├── __tests__/
+│   │   ├── TaskCard.test.tsx
+│   │   ├── TaskForm.test.tsx
+│   │   ├── TaskGroup.test.tsx
+│   │   └── TaskList.test.tsx
+│   ├── App.tsx
 ├── package.json
-└── tsconfig.json
+├── tsconfig.json
 ```
 
 ## Features
