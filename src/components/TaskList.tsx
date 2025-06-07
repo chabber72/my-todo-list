@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { TaskForm } from "./TaskForm";
-import { categories, Task } from "./task";
+import { categories, Task } from "../task";
 
 import {
   DragEndEvent,
@@ -19,34 +19,17 @@ import {
   getThisMonday,
   getThisSunday,
   getUTCDate,
-} from "./dates";
-import useLongPress from "./hooks/useLongPress";
-import { Icon } from "./components/icon";
- 
+  Month,
+  Months,
+} from "../dates";
+import useLongPress from "../hooks/useLongPress";
+import { Icon } from "./icon";
+import { DatePanel } from "./DatePanel";
+
 const today = new Date();
 const currentMonth = today.toLocaleString("default", {
   month: "long",
 }) as Month;
-
-const months = [
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December",
-] as const;
-type Month = (typeof months)[number];
-const daysInMonth = (month: Month) => {
-  const index = months.indexOf(month) + 1;
-  return new Date(today.getFullYear(), index, 0).getDate();
-};
 
 const isVisibleInViewport = (element: HTMLElement) => {
   const rect = element.getBoundingClientRect();
@@ -178,17 +161,11 @@ export function TaskList() {
     setSelectedDay(value);
   };
 
-  const getDayName = (indexMonth: number, indexDay: number) => {
-    const day = new Date(today.getFullYear(), indexMonth, indexDay);
-    const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-    return days[day.getDay()];
-  };
-
   const selectedDate =
     selectedMonth !== null && selectedDay !== null
       ? new Date(
           today.getFullYear(),
-          months.indexOf(selectedMonth),
+          Months.indexOf(selectedMonth),
           selectedDay,
           0,
         )
@@ -207,7 +184,7 @@ export function TaskList() {
       ? getUTCDate(dueDate) <=
           getFullDate(
             today.getFullYear(),
-            months.indexOf(selectedMonth),
+            Months.indexOf(selectedMonth),
             selectedDateIndex,
           )
       : true;
@@ -218,7 +195,7 @@ export function TaskList() {
       ? getUTCDate(startDate) <=
           getFullDate(
             today.getFullYear(),
-            months.indexOf(selectedMonth),
+            Months.indexOf(selectedMonth),
             selectedDateIndex,
           )
       : true;
@@ -238,7 +215,7 @@ export function TaskList() {
       ? getUTCDate(t.dueDate) <
         getFullDate(
           today.getFullYear(),
-          months.indexOf(selectedMonth),
+          Months.indexOf(selectedMonth),
           selectedDateIndex,
         )
       : false,
@@ -249,7 +226,7 @@ export function TaskList() {
       ? getUTCDate(t.dueDate).getTime() ===
         getFullDate(
           today.getFullYear(),
-          months.indexOf(selectedMonth),
+          Months.indexOf(selectedMonth),
           selectedDateIndex,
         ).getTime()
       : false,
@@ -266,7 +243,7 @@ export function TaskList() {
         getUTCDate(t.startDate) >
           getFullDate(
             today.getFullYear(),
-            months.indexOf(selectedMonth),
+            Months.indexOf(selectedMonth),
             selectedDateIndex,
           )
       : false,
@@ -309,54 +286,14 @@ export function TaskList() {
         })}
       >
         {showDatePanel && (
-          <>
-            <label className={styles.dateRibbonLabel}>TaskList</label>
-            <div className={styles.months}>
-              {months.map((month) => (
-                <div
-                  className={classNames(styles.month, {
-                    [styles.selectedMonth]: selectedMonth === month,
-                  })}
-                  key={month}
-                  onClick={handleMonthClick(month)}
-                  ref={(el) => {
-                    if (el) {
-                      refMonth.current.set(month, el);
-                    }
-                  }}
-                >
-                  {month}
-                </div>
-              ))}
-            </div>
-            <div className={styles.days}>
-              {Array.from(
-                { length: daysInMonth(selectedMonth) },
-                (_x, i) => i,
-              ).map((i) => {
-                const index = i + 1;
-                return (
-                  <div
-                    key={index}
-                    className={classNames(styles.day, {
-                      [styles.selectedDay]: selectedDay === index,
-                    })}
-                    onClick={handleDayClick(index)}
-                    ref={(el) => {
-                      if (el) {
-                        refDay.current.set(index, el);
-                      }
-                    }}
-                  >
-                    {index}
-                    <div>
-                      {getDayName(months.indexOf(selectedMonth), index)}
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </>
+          <DatePanel
+            refMonth={refMonth}
+            refDay={refDay}
+            selectedMonth={selectedMonth}
+            selectedDay={selectedDay}
+            onMonthClick={handleMonthClick}
+            onDayClick={handleDayClick}
+          />
         )}
         <div className={styles.grabberParent}>
           <div
@@ -371,6 +308,7 @@ export function TaskList() {
             className={styles.select}
             value={selectedFilter}
             onChange={handleSelectedFilterClick}
+            aria-label="Filter by category"
           >
             <option value="All">All</option>
             {categories.map((category) => (
@@ -380,51 +318,57 @@ export function TaskList() {
             ))}
           </select>
         </div>
-        <TaskGroup
-          filteredData={overdueTasks}
-          groupDescription="Overdue"
-          mouseSensor={mouseSensor}
-          touchSensor={touchSensor}
-          handleDragEnd={handleDragEnd}
-          handleTaskClick={handleTaskClick}
-          handleTaskUpdate={handleTaskUpdate}
-        />
-        <TaskGroup
-          filteredData={dueTasks}
-          groupDescription="Due Today"
-          mouseSensor={mouseSensor}
-          touchSensor={touchSensor}
-          handleDragEnd={handleDragEnd}
-          handleTaskClick={handleTaskClick}
-          handleTaskUpdate={handleTaskUpdate}
-        />
-        <TaskGroup
-          filteredData={dueThisWeekTasks}
-          groupDescription="Due This Week"
-          mouseSensor={mouseSensor}
-          touchSensor={touchSensor}
-          handleDragEnd={handleDragEnd}
-          handleTaskClick={handleTaskClick}
-          handleTaskUpdate={handleTaskUpdate}
-        />
-        <TaskGroup
-          filteredData={dueNextWeekTasks}
-          groupDescription="Due Next Week"
-          mouseSensor={mouseSensor}
-          touchSensor={touchSensor}
-          handleDragEnd={handleDragEnd}
-          handleTaskClick={handleTaskClick}
-          handleTaskUpdate={handleTaskUpdate}
-        />
-        <TaskGroup
-          filteredData={currentTasks}
-          groupDescription="Active"
-          mouseSensor={mouseSensor}
-          touchSensor={touchSensor}
-          handleDragEnd={handleDragEnd}
-          handleTaskClick={handleTaskClick}
-          handleTaskUpdate={handleTaskUpdate}
-        />
+        {filteredData.length === 0 ? (
+          <label>No tasks found</label>
+        ) : (
+          <>
+            <TaskGroup
+              filteredData={overdueTasks}
+              groupDescription="Overdue"
+              mouseSensor={mouseSensor}
+              touchSensor={touchSensor}
+              handleDragEnd={handleDragEnd}
+              handleTaskClick={handleTaskClick}
+              handleTaskUpdate={handleTaskUpdate}
+            />
+            <TaskGroup
+              filteredData={dueTasks}
+              groupDescription="Due Today"
+              mouseSensor={mouseSensor}
+              touchSensor={touchSensor}
+              handleDragEnd={handleDragEnd}
+              handleTaskClick={handleTaskClick}
+              handleTaskUpdate={handleTaskUpdate}
+            />
+            <TaskGroup
+              filteredData={dueThisWeekTasks}
+              groupDescription="Due This Week"
+              mouseSensor={mouseSensor}
+              touchSensor={touchSensor}
+              handleDragEnd={handleDragEnd}
+              handleTaskClick={handleTaskClick}
+              handleTaskUpdate={handleTaskUpdate}
+            />
+            <TaskGroup
+              filteredData={dueNextWeekTasks}
+              groupDescription="Due Next Week"
+              mouseSensor={mouseSensor}
+              touchSensor={touchSensor}
+              handleDragEnd={handleDragEnd}
+              handleTaskClick={handleTaskClick}
+              handleTaskUpdate={handleTaskUpdate}
+            />
+            <TaskGroup
+              filteredData={currentTasks}
+              groupDescription="Active"
+              mouseSensor={mouseSensor}
+              touchSensor={touchSensor}
+              handleDragEnd={handleDragEnd}
+              handleTaskClick={handleTaskClick}
+              handleTaskUpdate={handleTaskUpdate}
+            />
+          </>
+        )}
       </div>
       <div className={styles.addTaskButtonContainer}>
         <button
@@ -433,11 +377,7 @@ export function TaskList() {
             [styles.recording]: isRecording,
           })}
         >
-          {isRecording ? (            
-            <Icon name="square" />
-          ) : (
-            "+"
-          )}
+          {isRecording ? <Icon name="square" /> : "+"}
         </button>
       </div>
     </>

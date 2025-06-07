@@ -23,14 +23,6 @@ export const getNextSunday = (date: Date) => {
   );
 };
 
-export const getDayNumber = (date: Date) => {
-  return new Date(
-    new Date(date).toLocaleString("en-US", {
-      timeZone: "UTC",
-    }),
-  ).getDate();
-};
-
 export const getFullDate = (year: number, month: number, day: number) => {
   return new Date(year, month, day, 0);
 };
@@ -42,3 +34,22 @@ export const getUTCDate = (date: Date) => {
     }),
   );
 };
+
+export const Months = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+] as const;
+
+export type Month = (typeof Months)[number];
+
+export const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
