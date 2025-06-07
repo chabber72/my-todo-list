@@ -1,5 +1,5 @@
 export default {
-  preset: "ts-jest",
+  preset: "ts-jest/presets/default-esm",
   testEnvironment: "jsdom",
   setupFilesAfterEnv: ["<rootDir>/src/setupTests.ts"],
   moduleNameMapper: {
@@ -12,8 +12,12 @@ export default {
       "ts-jest",
       {
         useESM: true,
+        tsconfig: "tsconfig.json",
       },
     ],
   },
   extensionsToTreatAsEsm: [".ts", ".tsx"],
+  transformIgnorePatterns: [
+    "node_modules/(?!(@dnd-kit|react-dnd|dnd-core|@react-dnd)/)",
+  ],
 };

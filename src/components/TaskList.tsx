@@ -308,6 +308,7 @@ export function TaskList() {
             className={styles.select}
             value={selectedFilter}
             onChange={handleSelectedFilterClick}
+            aria-label="Filter by category"
           >
             <option value="All">All</option>
             {categories.map((category) => (
@@ -317,51 +318,57 @@ export function TaskList() {
             ))}
           </select>
         </div>
-        <TaskGroup
-          filteredData={overdueTasks}
-          groupDescription="Overdue"
-          mouseSensor={mouseSensor}
-          touchSensor={touchSensor}
-          handleDragEnd={handleDragEnd}
-          handleTaskClick={handleTaskClick}
-          handleTaskUpdate={handleTaskUpdate}
-        />
-        <TaskGroup
-          filteredData={dueTasks}
-          groupDescription="Due Today"
-          mouseSensor={mouseSensor}
-          touchSensor={touchSensor}
-          handleDragEnd={handleDragEnd}
-          handleTaskClick={handleTaskClick}
-          handleTaskUpdate={handleTaskUpdate}
-        />
-        <TaskGroup
-          filteredData={dueThisWeekTasks}
-          groupDescription="Due This Week"
-          mouseSensor={mouseSensor}
-          touchSensor={touchSensor}
-          handleDragEnd={handleDragEnd}
-          handleTaskClick={handleTaskClick}
-          handleTaskUpdate={handleTaskUpdate}
-        />
-        <TaskGroup
-          filteredData={dueNextWeekTasks}
-          groupDescription="Due Next Week"
-          mouseSensor={mouseSensor}
-          touchSensor={touchSensor}
-          handleDragEnd={handleDragEnd}
-          handleTaskClick={handleTaskClick}
-          handleTaskUpdate={handleTaskUpdate}
-        />
-        <TaskGroup
-          filteredData={currentTasks}
-          groupDescription="Active"
-          mouseSensor={mouseSensor}
-          touchSensor={touchSensor}
-          handleDragEnd={handleDragEnd}
-          handleTaskClick={handleTaskClick}
-          handleTaskUpdate={handleTaskUpdate}
-        />
+        {filteredData.length === 0 ? (
+          <label>No tasks found</label>
+        ) : (
+          <>
+            <TaskGroup
+              filteredData={overdueTasks}
+              groupDescription="Overdue"
+              mouseSensor={mouseSensor}
+              touchSensor={touchSensor}
+              handleDragEnd={handleDragEnd}
+              handleTaskClick={handleTaskClick}
+              handleTaskUpdate={handleTaskUpdate}
+            />
+            <TaskGroup
+              filteredData={dueTasks}
+              groupDescription="Due Today"
+              mouseSensor={mouseSensor}
+              touchSensor={touchSensor}
+              handleDragEnd={handleDragEnd}
+              handleTaskClick={handleTaskClick}
+              handleTaskUpdate={handleTaskUpdate}
+            />
+            <TaskGroup
+              filteredData={dueThisWeekTasks}
+              groupDescription="Due This Week"
+              mouseSensor={mouseSensor}
+              touchSensor={touchSensor}
+              handleDragEnd={handleDragEnd}
+              handleTaskClick={handleTaskClick}
+              handleTaskUpdate={handleTaskUpdate}
+            />
+            <TaskGroup
+              filteredData={dueNextWeekTasks}
+              groupDescription="Due Next Week"
+              mouseSensor={mouseSensor}
+              touchSensor={touchSensor}
+              handleDragEnd={handleDragEnd}
+              handleTaskClick={handleTaskClick}
+              handleTaskUpdate={handleTaskUpdate}
+            />
+            <TaskGroup
+              filteredData={currentTasks}
+              groupDescription="Active"
+              mouseSensor={mouseSensor}
+              touchSensor={touchSensor}
+              handleDragEnd={handleDragEnd}
+              handleTaskClick={handleTaskClick}
+              handleTaskUpdate={handleTaskUpdate}
+            />
+          </>
+        )}
       </div>
       <div className={styles.addTaskButtonContainer}>
         <button
