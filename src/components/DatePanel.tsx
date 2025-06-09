@@ -1,7 +1,7 @@
 import classNames from "classnames";
 import { days, Month, Months } from "../dates";
 import styles from "./DatePanel.module.css";
-import { useCallback, useMemo } from "react";
+import { useCallback, useEffect, useMemo, useRef } from "react";
 
 type DayRef = React.RefObject<Map<number, HTMLDivElement>>;
 type MonthRef = React.RefObject<Map<string, HTMLDivElement>>;
@@ -24,6 +24,61 @@ export function DatePanel({
   selectedMonth,
 }: DatePanelProps) {
   const today = new Date();
+  const daysRef = useRef<HTMLDivElement>(null);
+  const monthsRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const refs = [daysRef.current, monthsRef.current];
+    const listeners: Array<() => void> = [];
+
+    refs.forEach((el) => {
+      if (!el) return;
+
+      let isDown = false;
+      let startX = 0;
+      let scrollLeft = 0;
+
+      const mouseDown = (e: MouseEvent) => {
+        isDown = true;
+        el.classList.add("dragging");
+        startX = e.pageX - el.offsetLeft;
+        scrollLeft = el.scrollLeft;
+      };
+      const mouseLeave = () => {
+        isDown = false;
+        el.classList.remove("dragging");
+      };
+      const mouseUp = () => {
+        isDown = false;
+        el.classList.remove("dragging");
+      };
+      const mouseMove = (e: MouseEvent) => {
+        if (!isDown) return;
+        e.preventDefault();
+        const x = e.pageX - el.offsetLeft;
+        const walk = (x - startX) * 1;
+        el.scrollLeft = scrollLeft - walk;
+      };
+
+      el.addEventListener("mousedown", mouseDown);
+      el.addEventListener("mouseleave", mouseLeave);
+      el.addEventListener("mouseup", mouseUp);
+      el.addEventListener("mousemove", mouseMove);
+
+      // Push cleanup function for this element
+      listeners.push(() => {
+        el.removeEventListener("mousedown", mouseDown);
+        el.removeEventListener("mouseleave", mouseLeave);
+        el.removeEventListener("mouseup", mouseUp);
+        el.removeEventListener("mousemove", mouseMove);
+      });
+    });
+
+    // Cleanup all listeners
+    return () => {
+      listeners.forEach((cleanup) => cleanup());
+    };
+  }, []);
 
   const daysInMonth = useMemo(
     () => (month: Month) => {
@@ -55,7 +110,7 @@ export function DatePanel({
   return (
     <>
       <label className={styles.dateRibbonLabel}>TaskList</label>
-      <div className={styles.months}>
+      <div className={styles.months} ref={monthsRef}>
         {Months.map((month) => (
           <div
             className={classNames(styles.month, {
@@ -76,7 +131,7 @@ export function DatePanel({
           </div>
         ))}
       </div>
-      <div className={styles.days} aria-label="Calendar">
+      <div className={styles.days} aria-label="Calendar" ref={daysRef}>
         {Array.from({ length: daysInMonth(selectedMonth) }).map((_, i) => {
           const index = i + 1;
           return (

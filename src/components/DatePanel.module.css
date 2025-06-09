@@ -8,8 +8,14 @@
 .months {
   padding-top: 1rem;
   display: flex;
-  flex-direction: row;
   overflow-x: auto;
+  white-space: nowrap;
+  cursor: grab;
+  user-select: none;
+}
+
+.months.dragging {
+  cursor: grabbing;
 }
 
 .months::-webkit-scrollbar {
@@ -17,9 +23,9 @@
 }
 
 .month {
-  cursor: pointer;
   padding: 0.5rem 1.5rem;
   user-select: none;
+  cursor: pointer;
 }
 
 .selectedMonth {
@@ -34,6 +40,13 @@
   padding-top: 0.75rem;
   padding-bottom: 1.25rem;
   overflow-x: auto;
+  white-space: nowrap;
+  cursor: grab;
+  user-select: none;
+}
+
+.days.dragging {
+  cursor: grabbing;
 }
 
 .days::-webkit-scrollbar {
@@ -43,16 +56,19 @@
 .day {
   background-color: white;
   color: #b63cf2;
-  flex-direction: column;
   flex-shrink: 0;
   font-weight: bold;
   display: inline-flex;
+  cursor: pointer;
+  flex-direction: column;
+  overflow-x: auto;
   height: 5rem;
   width: 3.5rem;
   border-radius: 1rem;
   justify-content: center;
   align-items: center;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  user-select: none;
 }
 
 .selectedDay {
