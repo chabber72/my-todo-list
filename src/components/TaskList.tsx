@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { TaskForm } from "./TaskForm";
-import { categories, Task } from "../task";
+import { Task } from "../task";
 
 import {
   DragEndEvent,
@@ -25,6 +25,7 @@ import {
 import useLongPress from "../hooks/useLongPress";
 import { Icon } from "./icon";
 import { DatePanel } from "./DatePanel";
+import { TaskFilter } from "./TaskFilter";
 
 const today = new Date();
 const currentMonth = today.toLocaleString("default", {
@@ -304,19 +305,10 @@ export function TaskList() {
       </div>
       <div className={styles.taskList}>
         <div className={styles.titleHeader}>
-          <select
-            className={styles.select}
-            value={selectedFilter}
-            onChange={handleSelectedFilterClick}
-            aria-label="Filter by category"
-          >
-            <option value="All">All</option>
-            {categories.map((category) => (
-              <option key={category} value={category}>
-                {category}
-              </option>
-            ))}
-          </select>
+          <TaskFilter
+            selectedFilter={selectedFilter}
+            onFilterChange={handleSelectedFilterClick}
+          />
         </div>
         {filteredData.length === 0 ? (
           <label>No tasks found</label>
