@@ -1,6 +1,6 @@
 import { fireEvent, render, screen, within } from "@testing-library/react";
 import { TaskGroup } from "./TaskGroup";
-import { Task } from "../task";
+import { Task } from "../model/task";
 import { describe, it, expect, jest } from "@jest/globals";
 import { MouseSensor, TouchSensor, SensorDescriptor } from "@dnd-kit/core";
 

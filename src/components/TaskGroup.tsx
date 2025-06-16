@@ -5,7 +5,7 @@ import {
 import { DndContext, DragEndEvent, SensorDescriptor } from "@dnd-kit/core";
 import styles from "./TaskGroup.module.css";
 import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
-import { Task } from "../task";
+import { Task } from "../model/task";
 import { TaskCard } from "./TaskCard";
 
 type TaskGroupProps = {

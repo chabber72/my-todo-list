@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import { TaskFilter } from "./TaskFilter";
-import { categories } from "../task";
+import { categories } from "../model/task";
 import userEvent from "@testing-library/user-event";
 import { describe, it, expect, jest } from "@jest/globals";
 import { ChangeEvent } from "react";

@@ -1,7 +1,7 @@
 import { describe, it, expect, jest } from "@jest/globals";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { TaskForm } from "./TaskForm";
-import { Task } from "../task";
+import { Task } from "../model/task";
 import userEvent from "@testing-library/user-event";
 
 describe("TaskForm", () => {

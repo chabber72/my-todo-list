@@ -1,7 +1,7 @@
 import { describe, it, expect, jest } from "@jest/globals";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { TaskCard } from "./TaskCard";
-import { Task } from "../task";
+import { Task } from "../model/task";
 
 // Mock the DnD kit hooks
 jest.mock("@dnd-kit/sortable", () => ({

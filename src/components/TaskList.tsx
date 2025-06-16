@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { TaskForm } from "./TaskForm";
-import { Task } from "../task";
+import { Task } from "../model/task";
 
 import {
   DragEndEvent,
