@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import { Task } from "../task";
+import { Task } from "../model/task";
 import styles from "./TaskCard.module.css";
 import React from "react";
 import { useSortable } from "@dnd-kit/sortable";

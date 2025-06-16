@@ -1,4 +1,4 @@
-import { categories } from "../task";
+import { categories } from "../model/task";
 import styles from "./TaskFilter.module.css";
 
 type TaskFilterProps = {

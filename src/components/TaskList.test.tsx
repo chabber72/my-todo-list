@@ -1,7 +1,7 @@
 import { render, screen, fireEvent } from "@testing-library/react";
 import { TaskList } from "./TaskList";
 import { describe, it, expect, jest } from "@jest/globals";
-import { Task } from "../task";
+import { Task } from "../model/task";
 
 // Mock DnD-kit dependencies
 jest.mock("@dnd-kit/sortable", () => ({

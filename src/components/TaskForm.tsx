@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 import styles from "./TaskForm.module.css";
-import { categories, Task } from "../task";
+import { categories, Task } from "../model/task";
 import React from "react";
 
 type TaskFormProps = {
