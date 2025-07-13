@@ -148,6 +148,13 @@ export function TaskForm({
           type="date"
           value={startDate?.toISOString().split("T")[0]}
           onChange={(e) => {
+            if (!e.target.value) {
+              setCurrentTask((prev) => ({
+                ...(prev || EMPTY_TASK),
+                startDate: undefined,
+              }));
+              return;
+            }
             const date = new Date(e.target.value);
             setCurrentTask((prev) => ({
               ...(prev || EMPTY_TASK),
@@ -159,6 +166,13 @@ export function TaskForm({
           type="date"
           value={dueDate?.toISOString().split("T")[0]}
           onChange={(e) => {
+            if (!e.target.value) {
+              setCurrentTask((prev) => ({
+                ...(prev || EMPTY_TASK),
+                dueDate: undefined,
+              }));
+              return;
+            }
             const date = new Date(e.target.value);
             setCurrentTask((prev) => ({
               ...(prev || EMPTY_TASK),
