@@ -12,15 +12,22 @@ export default defineConfig({
   build: {
     outDir: "dist",
     emptyOutDir: true,
-    sourcemap: false,
+    sourcemap: false, // Disable source maps in production
     rollupOptions: {
-      input: "index.html", // Specify the entry point
+      input: {
+        main: "./index.html", // Specify the entry point
+      },
       output: {
-        manualChunks: undefined,
+        // Ensure all chunks go to assets directory
         entryFileNames: "assets/[name].[hash].js",
         chunkFileNames: "assets/[name].[hash].js",
         assetFileNames: "assets/[name].[hash].[ext]",
+        // Disable code splitting
+        manualChunks: undefined,
       },
     },
+    // Prevent chunk splitting
+    chunkSizeWarningLimit: 1000,
+    cssCodeSplit: false,
   },
 });
