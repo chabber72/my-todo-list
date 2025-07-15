@@ -26,8 +26,8 @@ jobs:
 
       - name: Verify Build Output
         run: |
-          echo "Checking build output structure:"
-          ls -R dist/
+          echo "Build contents:"
+          find dist -type f
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
@@ -38,17 +38,13 @@ jobs:
 
       - name: Deploy to S3
         run: |
-          # First ensure the assets directory exists
-          if [ ! -d "dist/assets" ]; then
-            echo "Creating assets directory"
-            mkdir -p dist/assets
-          fi
-
-          # Deploy index.html with no cache
-          aws s3 cp dist/index.html s3://${{ secrets.S3_BUCKET }}/index.html \
+          # First deploy all files except assets
+          aws s3 sync dist/ s3://${{ secrets.S3_BUCKET }} \
+            --delete \
+            --exclude "assets/*" \
             --cache-control "no-cache, no-store, must-revalidate"
 
-          # Deploy assets with long cache
+          # Then deploy assets with long cache
           aws s3 sync dist/assets/ s3://${{ secrets.S3_BUCKET }}/assets \
             --delete \
             --cache-control "max-age=31536000, public"
