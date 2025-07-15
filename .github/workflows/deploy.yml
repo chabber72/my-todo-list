@@ -22,7 +22,11 @@ jobs:
         run: npm ci
 
       - name: Build
-        run: npm run build
+        run: |
+          npm run typecheck
+          npm run build
+        env:
+          NODE_ENV: production
 
       - name: Verify Build Output
         run: |

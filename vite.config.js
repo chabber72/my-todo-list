@@ -15,21 +15,17 @@ export default defineConfig({
     sourcemap: false,
     minify: true,
     cssCodeSplit: false,
+    modulePreload: { polyfill: false },
+    reportCompressedSize: false,
     rollupOptions: {
-      input: {
-        index: "./index.html",
-      },
+      input: "./index.html",
       output: {
-        manualChunks(id) {
-          // Force all code into a single chunk
-          return "index";
-        },
+        manualChunks: {},
         entryFileNames: "assets/[name].[hash].js",
         chunkFileNames: "assets/[name].[hash].js",
         assetFileNames: "assets/[name].[hash].[ext]",
       },
     },
     target: "esnext",
-    modulePreload: false,
   },
 });
