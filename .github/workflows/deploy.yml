@@ -24,24 +24,13 @@ jobs:
       - name: Build
         run: |
           npm run build
+
+      - name: Check Build Output
+        run: |
           echo "Build completed, checking output:"
-          ls -la
-          echo "Contents of dist directory:"
           ls -la dist/
 
-      - name: Debug Build Output
-        if: always()
-        run: |
-          echo "Current directory: $(pwd)"
-          echo "Directory contents:"
-          ls -R
-          echo "Checking if dist exists:"
-          test -d dist && echo "dist directory exists" || echo "dist directory missing"
-          echo "Checking build script:"
-          cat package.json | grep build
-
       - name: Configure AWS Credentials
-        if: success()
         uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-access-key-id: ${{ secrets.AWS_S3_ACCESS_KEY }}
@@ -49,25 +38,16 @@ jobs:
           aws-region: us-west-2
 
       - name: Deploy to S3
-        if: success()
         run: |
-          echo "Starting deployment..."
-          echo "Checking dist directory contents:"
-          ls -la dist/
+          # First, copy index.html
+          cp index.html dist/
 
-          if [ ! -f "dist/index.html" ]; then
-            echo "Error: index.html not found in dist directory"
-            echo "Contents of current directory:"
-            ls -la
-            exit 1
-          fi
-
-          # Deploy HTML and other root files first
+          # Deploy everything to S3
           aws s3 sync dist/ s3://${{ secrets.S3_BUCKET }} \
             --delete \
             --exclude "assets/*" \
             --cache-control "no-cache, no-store, must-revalidate"
-
+            
           # Deploy assets with long cache
           aws s3 sync dist/assets/ s3://${{ secrets.S3_BUCKET }}/assets \
             --delete \
