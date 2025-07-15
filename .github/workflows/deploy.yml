@@ -24,8 +24,18 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: List build output
-        run: ls -la dist/
+      # Add these debug steps
+      - name: Debug - Show current directory
+        run: pwd
+
+      - name: Debug - List all files
+        run: |
+          echo "Root directory:"
+          ls -la
+          echo "Dist directory:"
+          ls -la dist || echo "dist directory not found"
+          echo "Current directory structure:"
+          find . -type f -not -path "./node_modules/*"
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
@@ -36,6 +46,11 @@ jobs:
 
       - name: Deploy to S3
         run: |
+          if [ ! -f "dist/index.html" ]; then
+            echo "Error: dist/index.html not found!"
+            exit 1
+          fi
+
           # Deploy index.html with no cache
           aws s3 cp dist/index.html s3://${{ secrets.S3_BUCKET }}/index.html \
             --cache-control "no-cache, no-store, must-revalidate"
