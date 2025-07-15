@@ -26,6 +26,7 @@ export function TaskCard({ id, task, onClick, onUpdateTask }: TaskCardProps) {
       const updatedTask: Task = {
         ...task,
         status: isSelected ? "done" : "to-do",
+        completedDate: new Date(),
       };
 
       onUpdateTask(updatedTask);

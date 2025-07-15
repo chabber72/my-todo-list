@@ -68,6 +68,7 @@ describe("TaskCard", () => {
     expect(mockHandlers.onUpdateTask).toHaveBeenCalledWith({
       ...mockTask,
       status: "done",
+      completedDate: expect.any(Date),
     });
   });
 

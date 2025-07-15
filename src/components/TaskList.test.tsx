@@ -77,7 +77,6 @@ describe("TaskList", () => {
   it("handles task status update", () => {
     render(<TaskList />);
 
-    // Find and click the task's checkbox
     const taskCard = screen
       .getByText("Task 1")
       .closest(".taskCard") as HTMLElement;
@@ -85,14 +84,10 @@ describe("TaskList", () => {
       .nextElementSibling as HTMLElement;
     fireEvent.click(checkbox);
 
-    // The component should update the task status and save to localStorage
-    const updatedTasks = mockTasks.map((t) =>
-      t.id === 1 ? { ...t, status: "done" } : t,
-    );
-
+    // Check localStorage was updated with new status
     expect(localStorage.setItem).toHaveBeenCalledWith(
       "myData",
-      JSON.stringify(updatedTasks),
+      expect.stringContaining('"status":"done"'),
     );
   });
 
@@ -114,23 +109,6 @@ describe("TaskList", () => {
     expect(localStorage.setItem).toHaveBeenCalledWith(
       "myData",
       expect.stringContaining('"title":"Task 1"'),
-    );
-  });
-
-  it("handles task status update", () => {
-    render(<TaskList />);
-
-    const taskCard = screen
-      .getByText("Task 1")
-      .closest(".taskCard") as HTMLElement;
-    const checkbox = taskCard.querySelector('input[type="checkbox"]')!
-      .nextElementSibling as HTMLElement;
-    fireEvent.click(checkbox);
-
-    // Check localStorage was updated with new status
-    expect(localStorage.setItem).toHaveBeenCalledWith(
-      "myData",
-      expect.stringContaining('"status":"done"'),
     );
   });
 

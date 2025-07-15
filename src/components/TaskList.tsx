@@ -205,7 +205,9 @@ export function TaskList() {
   const filteredData = data.filter(
     (t) =>
       (t.category === selectedFilter || selectedFilter === "All") &&
-      t.status !== "done" &&
+      (t.status === "done" && t.completedDate !== undefined
+        ? selectedDateIndex === getUTCDate(t.completedDate).getDate()
+        : true) &&
       ((t.dueDate === undefined && t.startDate === undefined) ||
         filterOnDueDate(t.dueDate) ||
         filterOnStartDate(t.startDate)),

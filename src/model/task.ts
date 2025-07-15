@@ -7,6 +7,7 @@ export interface Task {
   sortedId: number;
   title: string;
   category?: TaskCategory;
+  completedDate?: Date;
   description?: string;
   status?: "to-do" | "in-progress" | "done";
   startDate?: Date;

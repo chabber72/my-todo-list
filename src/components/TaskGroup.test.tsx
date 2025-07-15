@@ -135,6 +135,7 @@ describe("TaskGroup", () => {
     expect(mockProps.handleTaskUpdate).toHaveBeenCalledWith({
       ...mockTasks[0],
       status: "done",
+      completedDate: expect.any(Date),
     });
   });
 
