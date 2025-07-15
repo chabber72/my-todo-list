@@ -1,7 +1,7 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import checker from "vite-plugin-checker";
-import path from "path";
+
 export default defineConfig({
   plugins: [
     react(),
@@ -12,11 +12,14 @@ export default defineConfig({
   build: {
     outDir: "dist",
     emptyOutDir: true,
-    sourcemap: true,
+    sourcemap: false, // Disable source maps in production
     assetsDir: "assets",
     rollupOptions: {
       output: {
         manualChunks: undefined,
+        assetFileNames: "assets/[name].[hash].[ext]",
+        chunkFileNames: "assets/[name].[hash].js",
+        entryFileNames: "assets/[name].[hash].js",
       },
     },
   },

@@ -36,14 +36,17 @@ jobs:
 
       - name: Deploy to S3
         run: |
-          aws s3 sync dist/ s3://${{ secrets.S3_BUCKET }} \
-            --delete \
-            --cache-control "max-age=31536000, public" \
-            --exclude "*.html" \
-            --exclude "*.json"
+          # Deploy index.html with no cache
+          aws s3 cp dist/index.html s3://${{ secrets.S3_BUCKET }}/index.html \
+            --cache-control "no-cache, no-store, must-revalidate"
 
-          aws s3 sync dist/ s3://${{ secrets.S3_BUCKET }} \
+          # Deploy assets with long cache
+          aws s3 sync dist/assets/ s3://${{ secrets.S3_BUCKET }}/assets \
             --delete \
-            --cache-control "no-cache, no-store, must-revalidate" \
-            --include "*.html" \
-            --include "*.json"
+            --cache-control "max-age=31536000, public"
+
+          # Clean up old files
+          aws s3 rm s3://${{ secrets.S3_BUCKET }} \
+            --recursive \
+            --exclude "index.html" \
+            --exclude "assets/*"
