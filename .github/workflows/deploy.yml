@@ -62,7 +62,7 @@ jobs:
             exit 1
           fi
 
-          # Deploy all files from dist
+          # Deploy HTML and other root files first
           aws s3 sync dist/ s3://${{ secrets.S3_BUCKET }} \
             --delete \
             --exclude "assets/*" \

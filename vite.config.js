@@ -12,14 +12,17 @@ export default defineConfig({
   build: {
     outDir: "dist",
     emptyOutDir: true,
-    sourcemap: false, // Disable source maps in production
-    assetsDir: "assets",
+    sourcemap: false,
     rollupOptions: {
+      input: {
+        main: "./index.html",
+      },
       output: {
         manualChunks: undefined,
-        assetFileNames: "assets/[name].[hash].[ext]",
-        chunkFileNames: "assets/[name].[hash].js",
+        dir: "dist",
         entryFileNames: "assets/[name].[hash].js",
+        chunkFileNames: "assets/[name].[hash].js",
+        assetFileNames: "assets/[name].[hash].[ext]",
       },
     },
   },
