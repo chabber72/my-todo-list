@@ -18,9 +18,9 @@ export default defineConfig({
     modulePreload: { polyfill: false },
     reportCompressedSize: false,
     rollupOptions: {
-      input: "./index.html",
+      // Remove input: "./index.html",
       output: {
-        manualChunks: {},
+        manualChunks: undefined, // <--- THIS disables code splitting!
         entryFileNames: "assets/[name].[hash].js",
         chunkFileNames: "assets/[name].[hash].js",
         assetFileNames: "assets/[name].[hash].[ext]",
