@@ -22,13 +22,12 @@ jobs:
         run: npm ci
 
       - name: Build
-        run: |
-          npm run build
+        run: npm run build
 
-      - name: Check Build Output
+      - name: List Build Output
         run: |
-          echo "Build completed, checking output:"
-          ls -la dist/
+          echo "Build contents:"
+          ls -R dist/
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
@@ -39,16 +38,12 @@ jobs:
 
       - name: Deploy to S3
         run: |
-          # First, copy index.html
-          cp index.html dist/
-
-          # Deploy everything to S3
+          # Deploy everything to S3 without excluding anything
           aws s3 sync dist/ s3://${{ secrets.S3_BUCKET }} \
             --delete \
-            --exclude "assets/*" \
-            --cache-control "no-cache, no-store, must-revalidate"
+            --cache-control "max-age=31536000, public" \
+            --exclude "index.html"
             
-          # Deploy assets with long cache
-          aws s3 sync dist/assets/ s3://${{ secrets.S3_BUCKET }}/assets \
-            --delete \
-            --cache-control "max-age=31536000, public"
+          # Deploy index.html with no-cache
+          aws s3 cp dist/index.html s3://${{ secrets.S3_BUCKET }}/index.html \
+            --cache-control "no-cache, no-store, must-revalidate"
