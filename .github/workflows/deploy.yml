@@ -22,22 +22,26 @@ jobs:
         run: npm ci
 
       - name: Build
-        run: npm run build
-
-      # Add these debug steps
-      - name: Debug - Show current directory
-        run: pwd
-
-      - name: Debug - List all files
         run: |
-          echo "Root directory:"
+          npm run build
+          echo "Build completed, checking output:"
           ls -la
-          echo "Dist directory:"
-          ls -la dist || echo "dist directory not found"
-          echo "Current directory structure:"
-          find . -type f -not -path "./node_modules/*"
+          echo "Contents of dist directory:"
+          ls -la dist/
+
+      - name: Debug Build Output
+        if: always()
+        run: |
+          echo "Current directory: $(pwd)"
+          echo "Directory contents:"
+          ls -R
+          echo "Checking if dist exists:"
+          test -d dist && echo "dist directory exists" || echo "dist directory missing"
+          echo "Checking build script:"
+          cat package.json | grep build
 
       - name: Configure AWS Credentials
+        if: success()
         uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-access-key-id: ${{ secrets.AWS_S3_ACCESS_KEY }}
@@ -45,23 +49,26 @@ jobs:
           aws-region: us-west-2
 
       - name: Deploy to S3
+        if: success()
         run: |
+          echo "Starting deployment..."
+          echo "Checking dist directory contents:"
+          ls -la dist/
+
           if [ ! -f "dist/index.html" ]; then
-            echo "Error: dist/index.html not found!"
+            echo "Error: index.html not found in dist directory"
+            echo "Contents of current directory:"
+            ls -la
             exit 1
           fi
 
-          # Deploy index.html with no cache
-          aws s3 cp dist/index.html s3://${{ secrets.S3_BUCKET }}/index.html \
+          # Deploy all files from dist
+          aws s3 sync dist/ s3://${{ secrets.S3_BUCKET }} \
+            --delete \
+            --exclude "assets/*" \
             --cache-control "no-cache, no-store, must-revalidate"
 
           # Deploy assets with long cache
           aws s3 sync dist/assets/ s3://${{ secrets.S3_BUCKET }}/assets \
             --delete \
             --cache-control "max-age=31536000, public"
-
-          # Clean up old files
-          aws s3 rm s3://${{ secrets.S3_BUCKET }} \
-            --recursive \
-            --exclude "index.html" \
-            --exclude "assets/*"
