@@ -12,22 +12,24 @@ export default defineConfig({
   build: {
     outDir: "dist",
     emptyOutDir: true,
-    sourcemap: false, // Disable source maps in production
+    sourcemap: false,
+    minify: true,
+    cssCodeSplit: false,
     rollupOptions: {
       input: {
-        main: "./index.html", // Specify the entry point
+        index: "./index.html",
       },
       output: {
-        // Ensure all chunks go to assets directory
+        manualChunks(id) {
+          // Force all code into a single chunk
+          return "index";
+        },
         entryFileNames: "assets/[name].[hash].js",
         chunkFileNames: "assets/[name].[hash].js",
         assetFileNames: "assets/[name].[hash].[ext]",
-        // Disable code splitting
-        manualChunks: undefined,
       },
     },
-    // Prevent chunk splitting
-    chunkSizeWarningLimit: 1000,
-    cssCodeSplit: false,
+    target: "esnext",
+    modulePreload: false,
   },
 });
