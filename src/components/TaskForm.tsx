@@ -169,10 +169,10 @@ export function TaskForm({
       </div>
       <div className={styles.buttons}>
         <button onClick={handleOnCancel}>Cancel</button>
+        {task && <button onClick={handleDeleteClick}>Delete</button>}
         <button onClick={task ? handleUpdate : handleAdd}>
           {task ? "Update" : "Add"}
         </button>
-        {task && <button onClick={handleDeleteClick}>Delete</button>}
       </div>
     </div>
   );
