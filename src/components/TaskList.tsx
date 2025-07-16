@@ -239,7 +239,7 @@ export function TaskList() {
   });
 
   const overdueTasks = filteredData.filter((t) =>
-    selectedDateIndex && t.dueDate !== undefined
+    selectedDateIndex && t.dueDate !== undefined && t.status !== "done"
       ? getUTCDate(t.dueDate) <
         getFullDate(
           today.getFullYear(),
@@ -250,7 +250,7 @@ export function TaskList() {
   );
 
   const dueTasks = filteredData.filter((t) =>
-    selectedDateIndex && t.dueDate !== undefined
+    selectedDateIndex && t.dueDate !== undefined && t.status !== "done"
       ? getUTCDate(t.dueDate).getTime() ===
         getFullDate(
           today.getFullYear(),
