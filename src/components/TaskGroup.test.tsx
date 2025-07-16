@@ -147,7 +147,7 @@ describe("TaskGroup", () => {
       over: { id: 2 },
     };
 
-    mockProps.handleDragEnd(dragEvent as any);
+    mockProps.handleDragEnd(dragEvent);
 
     expect(mockProps.handleDragEnd).toHaveBeenCalledWith(dragEvent);
   });

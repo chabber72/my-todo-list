@@ -1,10 +1,11 @@
 const icons = ["square"] as const;
-
 type icon = (typeof icons)[number];
 
 type IconProps = {
   name: icon;
 };
+
+console.log("Available icons:", icons);
 
 export function Icon({ name }: IconProps) {
   let svg: React.ReactElement;
@@ -31,6 +32,7 @@ export function Icon({ name }: IconProps) {
           </g>
         </svg>
       );
+      break;
   }
 
   return svg;

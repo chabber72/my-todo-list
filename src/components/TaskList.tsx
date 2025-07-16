@@ -63,7 +63,11 @@ export function TaskList() {
       setIsRecording(true);
     },
     onClick() {
-      isRecording ? setIsRecording((prev) => !prev) : handleAddTaskClick();
+      if (isRecording) {
+        setIsRecording((prev) => !prev);
+      } else {
+        handleAddTaskClick();
+      }
     },
   });
 
@@ -343,6 +347,7 @@ export function TaskList() {
         ) : (
           <>
             <TaskGroup
+              groupType="overdue"
               filteredData={overdueTasks}
               groupDescription="Overdue"
               mouseSensor={mouseSensor}
@@ -352,6 +357,7 @@ export function TaskList() {
               handleTaskUpdate={handleTaskUpdate}
             />
             <TaskGroup
+              groupType="due-today"
               filteredData={dueTasks}
               groupDescription="Due Today"
               mouseSensor={mouseSensor}
@@ -361,6 +367,7 @@ export function TaskList() {
               handleTaskUpdate={handleTaskUpdate}
             />
             <TaskGroup
+              groupType="due-this-week"
               filteredData={dueThisWeekTasks}
               groupDescription="Due This Week"
               mouseSensor={mouseSensor}
@@ -370,6 +377,7 @@ export function TaskList() {
               handleTaskUpdate={handleTaskUpdate}
             />
             <TaskGroup
+              groupType="due-next-week"
               filteredData={dueNextWeekTasks}
               groupDescription="Due Next Week"
               mouseSensor={mouseSensor}
@@ -379,6 +387,7 @@ export function TaskList() {
               handleTaskUpdate={handleTaskUpdate}
             />
             <TaskGroup
+              groupType="active"
               filteredData={currentTasks}
               groupDescription="Active"
               mouseSensor={mouseSensor}

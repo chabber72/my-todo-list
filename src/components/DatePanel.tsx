@@ -23,7 +23,7 @@ export function DatePanel({
   selectedDay,
   selectedMonth,
 }: DatePanelProps) {
-  const today = new Date();
+  const today = useMemo(() => new Date(), []);
   const daysRef = useRef<HTMLDivElement>(null);
   const monthsRef = useRef<HTMLDivElement>(null);
 

@@ -99,6 +99,10 @@ export function TaskForm({
     ? new Date(currentTask.startDate)
     : undefined;
 
+  const isValidDate = (date: Date | undefined) => {
+    return date && !isNaN(date.getTime());
+  };
+
   return (
     <div className={styles.taskForm}>
       <h2 className={styles.title}>Title:</h2>
@@ -146,24 +150,46 @@ export function TaskForm({
       <div className={styles.dates}>
         <input
           type="date"
-          value={startDate?.toISOString().split("T")[0]}
+          value={
+            isValidDate(startDate)
+              ? startDate?.toISOString().split("T")[0]
+              : undefined
+          }
           onChange={(e) => {
-            const date = new Date(e.target.value);
-            setCurrentTask((prev) => ({
-              ...(prev || EMPTY_TASK),
-              startDate: date,
-            }));
+            if (isValidDate(new Date(e.target.value))) {
+              const date = new Date(e.target.value);
+              setCurrentTask((prev) => ({
+                ...(prev || EMPTY_TASK),
+                startDate: date,
+              }));
+            } else {
+              setCurrentTask((prev) => ({
+                ...(prev || EMPTY_TASK),
+                startDate: undefined,
+              }));
+            }
           }}
         />
         <input
           type="date"
-          value={dueDate?.toISOString().split("T")[0]}
+          value={
+            isValidDate(dueDate)
+              ? dueDate?.toISOString().split("T")[0]
+              : undefined
+          }
           onChange={(e) => {
-            const date = new Date(e.target.value);
-            setCurrentTask((prev) => ({
-              ...(prev || EMPTY_TASK),
-              dueDate: date,
-            }));
+            if (isValidDate(new Date(e.target.value))) {
+              const date = new Date(e.target.value);
+              setCurrentTask((prev) => ({
+                ...(prev || EMPTY_TASK),
+                dueDate: date,
+              }));
+            } else {
+              setCurrentTask((prev) => ({
+                ...(prev || EMPTY_TASK),
+                dueDate: undefined,
+              }));
+            }
           }}
         />
       </div>

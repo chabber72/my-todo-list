@@ -10,8 +10,24 @@
   font-weight: bold;
 }
 
-.due {
-  border-color: red;
+.overdue {
+  background-color: #f8d7da;
+}
+
+.dueToday {
+  background-color: #fff3cd;
+}
+
+.dueThisWeek {
+  background-color: #e2f0cb;
+}
+
+.dueNextWeek {
+  background-color: #e3e6fc;
+}
+
+.active {
+  background-color: white;
 }
 
 .dueLabel {
@@ -116,10 +132,30 @@ ul {
 
 .description {
   font-size: small;
-  color: #ccc;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+/* Add group type specific description color classes */
+.descriptionOverdue {
+  color: #a94442;
+}
+
+.descriptionDueToday {
+  color: #856404;
+}
+
+.descriptionDueThisWeek {
+  color: #5a7d36;
+}
+
+.descriptionDueNextWeek {
+  color: #4953a6;
+}
+
+.descriptionActive {
+  color: #ccc;
 }
 
 .category {

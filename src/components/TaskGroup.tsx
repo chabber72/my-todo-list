@@ -8,8 +8,16 @@ import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
 import { Task } from "../model/task";
 import { TaskCard } from "./TaskCard";
 
+export type GroupType =
+  | "overdue"
+  | "due-today"
+  | "due-this-week"
+  | "due-next-week"
+  | "active";
+
 type TaskGroupProps = {
   filteredData: Task[];
+  groupType?: GroupType;
   groupDescription: string;
   mouseSensor: SensorDescriptor<{
     activationConstraint: {
@@ -28,6 +36,7 @@ type TaskGroupProps = {
 };
 
 export function TaskGroup({
+  groupType,
   filteredData,
   groupDescription,
   handleDragEnd,
@@ -55,6 +64,7 @@ export function TaskGroup({
               {filteredData.map((task) => (
                 <TaskCard
                   id={task.id}
+                  groupType={groupType}
                   key={task.id}
                   task={task}
                   onClick={handleTaskClick}

@@ -4,15 +4,23 @@ import styles from "./TaskCard.module.css";
 import React from "react";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import { GroupType } from "./TaskGroup";
 
 type TaskCardProps = {
   id: number;
+  groupType?: GroupType;
   task?: Task;
   onClick?: (task: Task) => void;
   onUpdateTask?: (task: Task) => void;
 };
 
-export function TaskCard({ id, task, onClick, onUpdateTask }: TaskCardProps) {
+export function TaskCard({
+  groupType,
+  id,
+  task,
+  onClick,
+  onUpdateTask,
+}: TaskCardProps) {
   const [isChecked, setIsChecked] = React.useState(task?.status === "done");
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id });
@@ -37,14 +45,22 @@ export function TaskCard({ id, task, onClick, onUpdateTask }: TaskCardProps) {
   const handleTaskClick =
     (task: Task) => (e: React.MouseEvent<HTMLDivElement>) => {
       e.stopPropagation();
-      onClick && onClick(task);
+      if (onClick && task) {
+        onClick(task);
+      }
     };
 
   return (
     task && (
       <li key={task.id}>
         <div
-          className={styles.taskCard}
+          className={classNames(styles.taskCard, {
+            [styles.overdue]: groupType === "overdue",
+            [styles.dueToday]: groupType === "due-today",
+            [styles.dueThisWeek]: groupType === "due-this-week",
+            [styles.dueNextWeek]: groupType === "due-next-week",
+            [styles.active]: groupType === "active",
+          })}
           onClick={handleTaskClick(task)}
           ref={setNodeRef}
           {...attributes}
@@ -63,7 +79,17 @@ export function TaskCard({ id, task, onClick, onUpdateTask }: TaskCardProps) {
             >
               {task.title}
             </label>
-            <label className={styles.description}>{task.description}</label>
+            <label
+              className={classNames(styles.description, {
+                [styles.descriptionOverdue]: groupType === "overdue",
+                [styles.descriptionDueToday]: groupType === "due-today",
+                [styles.descriptionDueThisWeek]: groupType === "due-this-week",
+                [styles.descriptionDueNextWeek]: groupType === "due-next-week",
+                [styles.descriptionActive]: groupType === "active",
+              })}
+            >
+              {task.description}
+            </label>
             {task.category && (
               <label className={styles.category}>{task.category}</label>
             )}
