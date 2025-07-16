@@ -23,7 +23,7 @@ jobs:
 
       - name: Build
         run: |
-          npm run typecheck
+          tsc --noEmit --project tsconfig.json
           npm run build
         env:
           NODE_ENV: production
