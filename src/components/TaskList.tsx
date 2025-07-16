@@ -265,6 +265,7 @@ export function TaskList() {
     selectedDateIndex &&
     t.dueDate !== undefined &&
     selectedDate &&
+    t.status !== "done" &&
     t.startDate !== undefined
       ? getUTCDate(t.dueDate) >= getThisMonday(selectedDate) &&
         getUTCDate(t.dueDate) <= getThisSunday(selectedDate) &&
@@ -278,7 +279,7 @@ export function TaskList() {
   );
 
   const dueNextWeekTasks = data.filter((t) =>
-    t.dueDate !== undefined && selectedDate
+    t.dueDate !== undefined && selectedDate && t.status !== "done"
       ? getUTCDate(t.dueDate) >= getNextMonday(selectedDate) &&
         getUTCDate(t.dueDate) <= getNextSunday(selectedDate)
       : false,
