@@ -202,16 +202,41 @@ export function TaskList() {
       : true;
   };
 
-  const filteredData = data.filter(
-    (t) =>
-      (t.category === selectedFilter || selectedFilter === "All") &&
-      (t.status === "done" && t.completedDate !== undefined
-        ? selectedDateIndex === getUTCDate(t.completedDate).getDate()
-        : true) &&
+  const filteredData = data.filter((t) => {
+    const matchesCategory =
+      t.category === selectedFilter || selectedFilter === "All";
+
+    // If task is done and has completedDate, show it from createdAt through completedDate (inclusive)
+    if (
+      t.status === "done" &&
+      t.completedDate !== undefined &&
+      t.createdAt !== undefined
+    ) {
+      const completed = new Date(t.completedDate);
+      const created = getUTCDate(t.createdAt);
+      const selected = selectedDate;
+      const selectedMonthMatches =
+        selected &&
+        selectedMonth === selected.toLocaleString("default", { month: "long" });
+      const createdDay = created.setHours(0, 0, 0, 0);
+      const completedDay = completed.setHours(0, 0, 0, 0);
+      const selectedDayUTC = selected ? selected.setHours(0, 0, 0, 0) : null;
+      const inRange =
+        selected &&
+        createdDay <= (selectedDayUTC ?? 0) &&
+        (selectedDayUTC ?? 0) <= completedDay &&
+        selectedMonthMatches;
+      return matchesCategory && inRange;
+    }
+
+    // Otherwise, apply normal filters
+    return (
+      matchesCategory &&
       ((t.dueDate === undefined && t.startDate === undefined) ||
         filterOnDueDate(t.dueDate) ||
-        filterOnStartDate(t.startDate)),
-  );
+        filterOnStartDate(t.startDate))
+    );
+  });
 
   const overdueTasks = filteredData.filter((t) =>
     selectedDateIndex && t.dueDate !== undefined
