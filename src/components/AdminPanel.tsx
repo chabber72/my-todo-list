@@ -92,7 +92,6 @@ export function AdminPanel() {
                       className={styles.addButton}
                       disabled={!newCategory.trim()}
                     >
-                      <Icon name="plus" />
                       Add Category
                     </button>
                   </div>
