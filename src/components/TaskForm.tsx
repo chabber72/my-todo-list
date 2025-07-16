@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 import styles from "./TaskForm.module.css";
-import { categories, Task } from "../model/task";
+import { defaultCategories, Task } from "../model/task";
 import React from "react";
 
 type TaskFormProps = {
@@ -34,6 +34,11 @@ export function TaskForm({
     ...task,
   });
   const ref = useRef<HTMLInputElement>(null);
+
+  const storedCategories = localStorage.getItem("categories");
+  const categories: string[] = storedCategories
+    ? JSON.parse(storedCategories)
+    : defaultCategories;
 
   React.useEffect(() => {
     if (ref.current) {

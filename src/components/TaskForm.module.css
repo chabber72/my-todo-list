@@ -48,7 +48,7 @@ button {
   border: transparent;
   color: white;
   height: 3rem;
-  width: 5rem;
+  /* width: 5rem; */
   border-radius: 10%;
 }
 

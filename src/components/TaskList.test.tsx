@@ -2,6 +2,15 @@ import { render, screen, fireEvent } from "@testing-library/react";
 import { TaskList } from "./TaskList";
 import { describe, it, expect, jest } from "@jest/globals";
 import { Task } from "../model/task";
+import { BrowserRouter } from "react-router-dom";
+
+// Mock useNavigate
+jest.mock("react-router-dom", () => ({
+  useNavigate: () => jest.fn(),
+}));
+
+const renderWithRouter = (ui: React.ReactElement) =>
+  render(<BrowserRouter>{ui}</BrowserRouter>);
 
 // Mock DnD-kit dependencies
 jest.mock("@dnd-kit/sortable", () => ({
@@ -21,7 +30,49 @@ jest.mock("@dnd-kit/core", () => ({
   useSensor: jest.fn(() => ({
     activationConstraint: { distance: 10 },
   })),
+  useSensors: jest.fn(() => []),
 }));
+
+// Add missing mocks for other components
+jest.mock("./TaskForm", () => ({
+  TaskForm: () => <div data-testid="task-form">Task Form</div>,
+}));
+
+jest.mock("./DatePanel", () => ({
+  DatePanel: () => <div data-testid="date-panel">Date Panel</div>,
+}));
+
+jest.mock("./TaskFilter", () => ({
+  TaskFilter: ({
+    onFilterChange,
+  }: {
+    onFilterChange: (filter: string) => void;
+  }) => (
+    <select
+      aria-label="Filter by category"
+      onChange={(e) => onFilterChange(e.target.value)}
+    >
+      <option value="All">All</option>
+      <option value="Bug">Bug</option>
+      <option value="Feature">Feature</option>
+    </select>
+  ),
+}));
+
+jest.mock("./TaskGroup", () => ({
+  TaskGroup: ({ children }: { children: React.ReactNode }) => (
+    <div className="taskGroup">{children}</div>
+  ),
+}));
+
+jest.mock("./icon", () => ({
+  Icon: ({ name }: { name: string }) => (
+    <span data-testid={`icon-${name}`}>{name}</span>
+  ),
+}));
+
+// Mock CSS modules
+jest.mock("./TaskList.module.css", () => ({}));
 
 const mockTasks: Task[] = [
   {
@@ -67,7 +118,7 @@ describe("TaskList", () => {
   });
 
   it("renders tasks from localStorage", () => {
-    render(<TaskList />);
+    renderWithRouter(<TaskList />);
 
     // Verify tasks are rendered
     expect(screen.getByText("Task 1")).toBeInTheDocument();
@@ -75,7 +126,7 @@ describe("TaskList", () => {
   });
 
   it("handles task status update", () => {
-    render(<TaskList />);
+    renderWithRouter(<TaskList />);
 
     const taskCard = screen
       .getByText("Task 1")
@@ -92,7 +143,7 @@ describe("TaskList", () => {
   });
 
   it("renders tasks in correct groups", () => {
-    render(<TaskList />);
+    renderWithRouter(<TaskList />);
 
     // Verify tasks are rendered
     expect(screen.getByText("Task 1")).toBeInTheDocument();
@@ -100,7 +151,7 @@ describe("TaskList", () => {
   });
 
   it("handles task click", () => {
-    render(<TaskList />);
+    renderWithRouter(<TaskList />);
 
     const task = screen.getByText("Task 1").closest(".taskCard") as HTMLElement;
     fireEvent.click(task);
@@ -113,7 +164,7 @@ describe("TaskList", () => {
   });
 
   it("handles task reordering", () => {
-    render(<TaskList />);
+    renderWithRouter(<TaskList />);
 
     const dragEndEvent = {
       active: { id: 1 },
@@ -133,7 +184,7 @@ describe("TaskList", () => {
   });
 
   it("filters tasks by category", () => {
-    render(<TaskList />);
+    renderWithRouter(<TaskList />);
 
     // Find category filter
     const categorySelect = screen.getByLabelText("Filter by category");
@@ -145,7 +196,7 @@ describe("TaskList", () => {
   });
 
   it("shows empty state when no tasks match filter", () => {
-    render(<TaskList />);
+    renderWithRouter(<TaskList />);
 
     // Set filter to non-existing category
     const categorySelect = screen.getByLabelText("Filter by category");

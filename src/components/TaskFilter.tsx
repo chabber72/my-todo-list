@@ -1,4 +1,4 @@
-import { categories } from "../model/task";
+import { defaultCategories } from "../model/task";
 import styles from "./TaskFilter.module.css";
 
 type TaskFilterProps = {
@@ -19,7 +19,7 @@ export function TaskFilter({
         onChange={onFilterChange}
       >
         <option value="All">All</option>
-        {categories.map((category) => (
+        {defaultCategories.map((category) => (
           <option key={category} value={category}>
             {category}
           </option>

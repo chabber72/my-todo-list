@@ -29,6 +29,17 @@ body {
   font-optical-sizing: auto;
 }
 
+.adminButton {
+  position: fixed;
+  top: 1rem;
+  right: 0rem;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  color: white;
+  font-size: 1.5rem;
+}
+
 .taskList {
   flex-grow: 1;
   padding-left: 0.25rem;

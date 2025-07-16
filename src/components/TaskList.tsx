@@ -26,6 +26,7 @@ import useLongPress from "../hooks/useLongPress";
 import { Icon } from "./icon";
 import { DatePanel } from "./DatePanel";
 import { TaskFilter } from "./TaskFilter";
+import { useNavigate } from "react-router-dom";
 
 const today = new Date();
 const currentMonth = today.toLocaleString("default", {
@@ -57,6 +58,7 @@ export function TaskList() {
   );
   const refDay = useRef<Map<number, HTMLDivElement>>(new Map());
   const refMonth = useRef<Map<string, HTMLDivElement>>(new Map());
+  const navigate = useNavigate();
 
   const backspaceLongPress = useLongPress<HTMLButtonElement>({
     onLongPress() {
@@ -164,6 +166,10 @@ export function TaskList() {
 
   const handleDayClick = (value: number) => () => {
     setSelectedDay(value);
+  };
+
+  const handleAdminClick = () => {
+    navigate("/admin");
   };
 
   const selectedDate =
@@ -341,6 +347,13 @@ export function TaskList() {
             selectedFilter={selectedFilter}
             onFilterChange={handleSelectedFilterClick}
           />
+          <button
+            className={styles.adminButton}
+            onClick={handleAdminClick}
+            title="Admin Settings"
+          >
+            <Icon name="gear" />
+          </button>
         </div>
         {filteredData.length === 0 ? (
           <label>No tasks found</label>

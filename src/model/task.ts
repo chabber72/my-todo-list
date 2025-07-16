@@ -1,5 +1,5 @@
-export const categories = ["Bug", "Feature", "ToDo"] as const;
-type TaskCategory = (typeof categories)[number];
+export const defaultCategories = ["Bug", "Feature", "ToDo"] as const;
+type TaskCategory = (typeof defaultCategories)[number];
 
 export interface Task {
   id: number;

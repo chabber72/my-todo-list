@@ -2,6 +2,10 @@ export default {
   preset: "ts-jest/presets/default-esm",
   testEnvironment: "jsdom",
   setupFilesAfterEnv: ["<rootDir>/src/setupTests.ts"],
+  globals: {
+    TextEncoder: TextEncoder,
+    TextDecoder: TextDecoder,
+  },
   moduleNameMapper: {
     "\\.(css|less|scss|sass)$": "identity-obj-proxy",
     "^(\\.{1,2}/.*)\\.js$": "$1",

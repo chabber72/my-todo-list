@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import { TaskFilter } from "./TaskFilter";
-import { categories } from "../model/task";
+import { defaultCategories } from "../model/task";
 import userEvent from "@testing-library/user-event";
 import { describe, it, expect, jest } from "@jest/globals";
 import { ChangeEvent } from "react";
@@ -24,7 +24,7 @@ describe("TaskFilter", () => {
   });
 
   // Test all possible filter values
-  categories.forEach((category) => {
+  defaultCategories.forEach((category) => {
     it(`renders correctly with ${category} filter selected`, () => {
       render(
         <TaskFilter
@@ -58,7 +58,7 @@ describe("TaskFilter", () => {
     expect(screen.getByText("All")).toBeInTheDocument();
 
     // Check if all categories from task.ts are present
-    categories.forEach((category) => {
+    defaultCategories.forEach((category) => {
       expect(screen.getByText(category)).toBeInTheDocument();
     });
   });
